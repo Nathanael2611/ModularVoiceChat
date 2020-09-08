@@ -18,6 +18,7 @@ import net.minecraft.util.text.TextFormatting;
 
 import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
 
 public class GuiConfig extends GuiScreen
 {
@@ -40,10 +41,11 @@ public class GuiConfig extends GuiScreen
         super.initGui();
         buttonList.clear();
         int y = 80 + 20;
-        this.buttonList.add(this.microSelector = new GuiDropDownMenu(12, width / 2 - 150 - 4, y, 148, 20, MicroManager.getHandler().getMicro(), Helpers.getStringListAsArray(AudioUtil.findAudioDevices(MicroData.MIC_INFO))));
-        this.buttonList.add(this.speakerSelector = new GuiDropDownMenu(13, width / 2 + 6, y, 148, 20, SpeakerManager.getHandler().getSpeaker(), Helpers.getStringListAsArray(AudioUtil.findAudioDevices(SpeakerData.SPEAKER_INFO))));
         this.buttonList.add(this.microVolume = new GuiConfigSlider(this, 12, width / 2 - 150 - 5, y + 25, ClientConfig.MICROPHONE_VOLUME, 0, 150));
         this.buttonList.add(this.speakerVolume = new GuiConfigSlider(this, 12, width/ 2 + 5, y + 25, ClientConfig.SPEAKER_VOLUME, 0, 150));
+        this.buttonList.add(new GuiButton(1, width / 2 - 155, y + 50,150 + 5 + 5 + 150, 20, "Rejoindre le discord de " + ModularVoiceChat.MOD_NAME));
+        this.buttonList.add(this.microSelector = new GuiDropDownMenu(12, width / 2 - 150 - 4, y, 148, 20, MicroManager.getHandler().getMicro(), Helpers.getStringListAsArray(AudioUtil.findAudioDevices(MicroData.MIC_INFO))));
+        this.buttonList.add(this.speakerSelector = new GuiDropDownMenu(13, width / 2 + 6, y, 148, 20, SpeakerManager.getHandler().getSpeaker(), Helpers.getStringListAsArray(AudioUtil.findAudioDevices(SpeakerData.SPEAKER_INFO))));
     }
 
     @Override
@@ -52,6 +54,7 @@ public class GuiConfig extends GuiScreen
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.drawDefaultBackground();
         GlStateManager.pushMatrix();
+        GlStateManager.color(1, 1, 1);
         GlStateManager.translate((width / 2) - 32 - (fontRenderer.getStringWidth(ModularVoiceChat.MOD_NAME) / 2), 30, 1);
         GlStateManager.scale(1.2, 1.2, 1.2);
         mc.getTextureManager().bindTexture(ClientEventHandler.MICRO);
@@ -91,7 +94,11 @@ public class GuiConfig extends GuiScreen
     protected void actionPerformed(GuiButton button) throws IOException
     {
         super.actionPerformed(button);
-        if(button instanceof GuiDropDownMenu)
+        if(button.id == 1)
+        {
+            Desktop.getDesktop().browse(URI.create(ModularVoiceChat.DISCORD_INVITE));
+        }
+        else if(button instanceof GuiDropDownMenu)
         {
             GuiDropDownMenu drop = (GuiDropDownMenu) button;
             if(drop == this.microSelector)

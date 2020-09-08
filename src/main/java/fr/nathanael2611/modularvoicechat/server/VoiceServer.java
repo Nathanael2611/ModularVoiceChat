@@ -6,6 +6,8 @@ import com.esotericsoftware.kryonet.Server;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Lists;
 import fr.nathanael2611.modularvoicechat.ModularVoiceChat;
+import fr.nathanael2611.modularvoicechat.api.dispatcher.IVoiceDispatcher;
+import fr.nathanael2611.modularvoicechat.config.ServerConfig;
 import fr.nathanael2611.modularvoicechat.network.objects.HelloImAPlayer;
 import fr.nathanael2611.modularvoicechat.network.objects.KryoObjects;
 import fr.nathanael2611.modularvoicechat.network.objects.VoiceToClient;
@@ -23,12 +25,14 @@ public class VoiceServer
 
     final HashBiMap<Integer, Connection> CONNECTIONS_MAP = HashBiMap.create();
 
+    private IVoiceDispatcher dispatcher;
     private int port;
     private Server server;
 
     VoiceServer()
     {
-        this.port = ModularVoiceChat.DEFAULT_PORT;
+        this.port = ServerConfig.generalConfig.port;
+        this.dispatcher = ServerConfig.generalConfig.dispatcher.createDispatcher();
         this.server = new Server(10000000, 10000000);
         KryoObjects.registerObjects(this.server.getKryo());
         server.start();
@@ -112,4 +116,8 @@ public class VoiceServer
         return list;
     }
 
+    public IVoiceDispatcher getVoiceDispatcher()
+    {
+        return dispatcher;
+    }
 }

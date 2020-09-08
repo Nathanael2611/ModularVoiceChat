@@ -8,14 +8,26 @@ import net.minecraft.client.Minecraft;
 
 import java.io.IOException;
 
+/**
+ * The VoiceClient
+ */
 public class VoiceClient
 {
 
+    /* The server hostname */
     private String host;
+    /* The server port */
     private int port;
+    /* The Client */
     private Client client;
 
-    public VoiceClient(String playerName, String host, int port)
+    /**
+     * Constructor
+     * @param playerName the player name
+     * @param host the server hostname
+     * @param port the server port
+     */
+    VoiceClient(String playerName, String host, int port)
     {
         this.host = host;
         this.port = port;
@@ -45,19 +57,39 @@ public class VoiceClient
 
     }
 
+    /**
+     * Send a packet to server
+     * @param object packet
+     */
     public void send(Object object)
     {
         this.client.sendTCP(object);
     }
 
-    public void authenticate(String name)
+    /**
+     * Authenticate with a given name
+     * @param name player name
+     */
+    private void authenticate(String name)
     {
         send(new HelloImAPlayer(name));
     }
 
+    /**
+     * Close the VoiceClient
+     */
     public void close()
     {
         this.client.close();
+    }
+
+    /**
+     * Check if the connection is connected to server
+     * @return true if client is connected
+     */
+    public boolean isConnected()
+    {
+        return this.client != null && this.client.isConnected();
     }
 
 }

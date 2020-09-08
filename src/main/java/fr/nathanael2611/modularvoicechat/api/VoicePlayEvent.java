@@ -2,14 +2,16 @@ package fr.nathanael2611.modularvoicechat.api;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
 
-public class VoiceRecordedEvent extends Event
+public class VoicePlayEvent extends Event
 {
 
     private byte[] recordedSamples;
+    private int volumePercent;
 
-    public VoiceRecordedEvent(byte[] recordedSamples)
+    public VoicePlayEvent(byte[] recordedSamples, int volumePercent)
     {
         this.recordedSamples = recordedSamples;
+        this.volumePercent = volumePercent;
     }
 
     @Override
@@ -26,6 +28,16 @@ public class VoiceRecordedEvent extends Event
     public void setRecordedSamples(byte[] recordedSamples)
     {
         this.recordedSamples = recordedSamples;
+    }
+
+    public int getVolumePercent()
+    {
+        return volumePercent;
+    }
+
+    public void setVolumePercent(int volumePercent)
+    {
+        this.volumePercent = volumePercent;
     }
 
 }

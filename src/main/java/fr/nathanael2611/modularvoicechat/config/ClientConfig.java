@@ -5,6 +5,10 @@ import com.google.gson.JsonPrimitive;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Client config manager
+ * Using a json because normally, the users won't have to manually edit this.
+ */
 public class ClientConfig extends GameConfig
 {
 

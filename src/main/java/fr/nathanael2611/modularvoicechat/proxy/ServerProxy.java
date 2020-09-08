@@ -1,5 +1,6 @@
 package fr.nathanael2611.modularvoicechat.proxy;
 
+import fr.nathanael2611.modularvoicechat.config.ServerConfig;
 import fr.nathanael2611.modularvoicechat.server.ServerEventHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -13,6 +14,7 @@ public class ServerProxy extends CommonProxy
     public void onPreInitialization(FMLPreInitializationEvent event)
     {
         super.onPreInitialization(event);
+
 
         MinecraftForge.EVENT_BUS.register(new ServerEventHandler());
     }

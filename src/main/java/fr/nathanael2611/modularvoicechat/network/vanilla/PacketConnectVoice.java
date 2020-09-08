@@ -1,11 +1,13 @@
 package fr.nathanael2611.modularvoicechat.network.vanilla;
 
+import fr.nathanael2611.modularvoicechat.ModularVoiceChat;
 import fr.nathanael2611.modularvoicechat.client.voice.VoiceClientManager;
 import fr.nathanael2611.modularvoicechat.client.voice.audio.MicroManager;
 import fr.nathanael2611.modularvoicechat.client.voice.audio.SpeakerManager;
 import fr.nathanael2611.modularvoicechat.util.Helpers;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -88,6 +90,7 @@ public class PacketConnectVoice implements IMessage
                 VoiceClientManager.start(message.playerName, Minecraft.getMinecraft().getCurrentServerData().serverIP.split(":")[0], message.port);
                 MicroManager.start();
                 SpeakerManager.start();
+                Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§2[" + ModularVoiceChat.MOD_NAME + "] §aSuccessfully established connection with voice-server!"));
             }
             return null;
         }

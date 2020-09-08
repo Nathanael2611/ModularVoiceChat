@@ -1,8 +1,10 @@
 package fr.nathanael2611.modularvoicechat.audio.speaker;
 
+import fr.nathanael2611.modularvoicechat.api.VoicePlayEvent;
 import fr.nathanael2611.modularvoicechat.audio.api.NoExceptionCloseable;
 import fr.nathanael2611.modularvoicechat.audio.api.IAudioDecoder;
 import fr.nathanael2611.modularvoicechat.audio.impl.OpusDecoder;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -29,7 +31,13 @@ public class SpeakerBufferPusher implements NoExceptionCloseable
                 if (speakerData.isAvailable(id) && speakerData.freeBuffer(id) > 0)
                 {
                     SpeakerBuffer.AudioEntry entry = buffer.getNextPacket();
-                    speakerData.write(id, entry.getPacket(), entry.getVolumePercent());
+
+                    VoicePlayEvent event = new VoicePlayEvent(entry.getPacket(), entry.getVolumePercent());
+                    MinecraftForge.EVENT_BUS.post(event);
+                    if(!event.isCanceled())
+                    {
+                        speakerData.write(id, event.getRecordedSamples(), event.getVolumePercent());
+                    }
                 }
             }
         });

@@ -42,7 +42,12 @@ public class KryoNetServerListener extends Listener
             if (object instanceof VoiceToServer)
             {
                 VoiceToServer voiceToServer = (VoiceToServer) object;
-                MinecraftForge.EVENT_BUS.post(new VoiceDispatchEvent(voiceServer, player, voiceToServer.opusBytes));
+                VoiceDispatchEvent event = new VoiceDispatchEvent(voiceServer, player, voiceToServer.opusBytes);
+                MinecraftForge.EVENT_BUS.post(event);
+                if(!event.isCanceled())
+                {
+                    event.getVoiceServer().getVoiceDispatcher().dispatch(event);
+                }
             }
         }
         super.received(connection, object);

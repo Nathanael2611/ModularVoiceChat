@@ -29,6 +29,7 @@ public class ModularVoiceChat
     public static File modConfigDir;
 
     public static final int DEFAULT_PORT = 7656;
+    public static final String DISCORD_INVITE = "https://discord.gg/kSu7eFE";
 
     @Mod.EventHandler
     public void onPreInitialization(FMLPreInitializationEvent event)
@@ -59,9 +60,12 @@ public class ModularVoiceChat
     @Mod.EventHandler
     public void onServerStart(FMLServerStartingEvent event)
     {
-        if(!VoiceServerManager.isStarted())
+        if(event.getServer().isDedicatedServer())
         {
-            VoiceServerManager.start();
+            if(!VoiceServerManager.isStarted())
+            {
+                VoiceServerManager.start();
+            }
         }
     }
 
