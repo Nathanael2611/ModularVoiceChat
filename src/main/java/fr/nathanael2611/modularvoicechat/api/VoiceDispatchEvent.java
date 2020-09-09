@@ -1,15 +1,20 @@
 package fr.nathanael2611.modularvoicechat.api;
 
+import com.google.common.collect.Maps;
 import fr.nathanael2611.modularvoicechat.network.objects.VoiceToClient;
 import fr.nathanael2611.modularvoicechat.server.VoiceServer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+
+import java.util.HashMap;
 
 /**
  * Event used to able the modders to create their own VoiceDispatcher.
  */
 public class VoiceDispatchEvent extends PlayerEvent
 {
+
+    private HashMap<EntityPlayerMP, VoiceToClient> hearList = Maps.newHashMap();
 
     /* The speaker (sender of the audio-data) */
     private EntityPlayerMP speaker;
@@ -72,7 +77,7 @@ public class VoiceDispatchEvent extends PlayerEvent
      */
     private VoiceToClient getPacket(int volume)
     {
-        return new VoiceToClient(this.getEntityPlayer().getEntityId(), this.voiceData, volume, VoiceProperties.empty());
+        return getPacket(volume, VoiceProperties.empty());
     }
 
     /**
@@ -96,7 +101,20 @@ public class VoiceDispatchEvent extends PlayerEvent
 
     public void dispatchTo(EntityPlayerMP playerMP, int voiceVolume, VoiceProperties properties)
     {
-        this.voiceServer.send(playerMP, getPacket(voiceVolume, properties));
+        this.dispatchTo(playerMP, voiceVolume, properties, false);
+    }
+
+    public void dispatchTo(EntityPlayerMP playerMP, int voiceVolume, VoiceProperties properties, boolean forceOverride)
+    {
+        VoiceToClient packet = getPacket(voiceVolume, properties);
+        if(!forceOverride && this.hearList.containsKey(playerMP))
+        {
+            if(voiceVolume < this.hearList.get(playerMP).volumePercent)
+            {
+                return;
+            }
+        }
+        this.hearList.put(playerMP, packet);
     }
 
     /**
@@ -116,13 +134,29 @@ public class VoiceDispatchEvent extends PlayerEvent
         this.dispatchToAllExceptSpeaker(voiceVolume, VoiceProperties.empty());
     }
 
+    public void dispatchToAllExceptSpeaker(int voiceVolume, VoiceProperties properties)
+    {
+        this.dispatchToAllExceptSpeaker(voiceVolume, properties, false);
+    }
+
     /**
      * Send audio-data to all player, except a specific one
      * @param voiceVolume the custom volume that we want the audio-data to be played
      */
-    public void dispatchToAllExceptSpeaker(int voiceVolume, VoiceProperties properties)
+    public void dispatchToAllExceptSpeaker(int voiceVolume, VoiceProperties properties, boolean forceOverride)
     {
-        this.voiceServer.sendToAllExcept(this.speaker, getPacket(voiceVolume, properties));
+        for (EntityPlayerMP connectedPlayer : this.voiceServer.getConnectedPlayers())
+        {
+            this.dispatchTo(connectedPlayer, voiceVolume, properties, forceOverride);
+        }
+    }
+
+    /**
+     * THIS METHOD DO NOT HAVE TO BE USED BY API.
+     */
+    public void finalizeDispatch()
+    {
+        this.hearList.forEach((player, packet)-> this.voiceServer.send(player, packet));
     }
 
 

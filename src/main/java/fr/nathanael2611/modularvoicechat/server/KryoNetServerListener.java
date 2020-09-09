@@ -48,6 +48,7 @@ public class KryoNetServerListener extends Listener
                 {
                     event.getVoiceServer().getVoiceDispatcher().dispatch(event);
                 }
+                event.finalizeDispatch();
             }
         }
         super.received(connection, object);
