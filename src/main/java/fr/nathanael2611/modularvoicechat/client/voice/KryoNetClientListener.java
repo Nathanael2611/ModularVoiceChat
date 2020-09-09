@@ -23,7 +23,7 @@ public class KryoNetClientListener extends Listener
             VoiceToClient voiceToClient = (VoiceToClient) object;
             if(SpeakerManager.isRunning())
             {
-                SpeakerManager.getHandler().receiveVoicePacket(voiceToClient.entityId, voiceToClient.opusBytes, voiceToClient.volumePercent);
+                SpeakerManager.getHandler().receiveVoicePacket(voiceToClient.entityId, voiceToClient.opusBytes, voiceToClient.volumePercent, voiceToClient.properties);
             }
         }
         super.received(connection, object);

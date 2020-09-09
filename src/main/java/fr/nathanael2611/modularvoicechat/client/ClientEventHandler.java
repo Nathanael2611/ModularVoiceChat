@@ -1,6 +1,7 @@
 package fr.nathanael2611.modularvoicechat.client;
 
 import fr.nathanael2611.modularvoicechat.ModularVoiceChat;
+import fr.nathanael2611.modularvoicechat.api.VoicePlayEvent;
 import fr.nathanael2611.modularvoicechat.client.gui.GuiConfig;
 import fr.nathanael2611.modularvoicechat.client.voice.VoiceClientManager;
 import fr.nathanael2611.modularvoicechat.client.voice.audio.MicroManager;
@@ -123,6 +124,5 @@ public class ClientEventHandler
             }
         }
     }
-
 
 }

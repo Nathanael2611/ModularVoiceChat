@@ -38,7 +38,7 @@ public class VoiceServer
         server.start();
         try
         {
-            server.bind(this.port);
+            server.bind(this.port + 1, this.port );
             server.addListener(new KryoNetServerListener(this));
         } catch (IOException e)
         {
@@ -55,7 +55,7 @@ public class VoiceServer
             {
                 if(connectionsEntry.getValue() != null)
                 {
-                    connectionsEntry.getValue().sendTCP(obj);
+                    connectionsEntry.getValue().sendUDP(obj);
                 }
             }
         }
@@ -66,7 +66,7 @@ public class VoiceServer
         Connection connection = getPlayerConnection(dest);
         if(connection != null)
         {
-            connection.sendTCP(obj);
+            connection.sendUDP(obj);
         }
     }
 

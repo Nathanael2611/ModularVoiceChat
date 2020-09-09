@@ -1,6 +1,7 @@
 package fr.nathanael2611.modularvoicechat.audio.speaker;
 
 import fr.nathanael2611.modularvoicechat.api.VoicePlayEvent;
+import fr.nathanael2611.modularvoicechat.api.VoiceProperties;
 import fr.nathanael2611.modularvoicechat.audio.api.NoExceptionCloseable;
 import fr.nathanael2611.modularvoicechat.audio.api.IAudioDecoder;
 import fr.nathanael2611.modularvoicechat.audio.impl.OpusDecoder;
@@ -32,7 +33,7 @@ public class SpeakerBufferPusher implements NoExceptionCloseable
                 {
                     SpeakerBuffer.AudioEntry entry = buffer.getNextPacket();
 
-                    VoicePlayEvent event = new VoicePlayEvent(entry.getPacket(), entry.getVolumePercent());
+                    VoicePlayEvent event = new VoicePlayEvent(entry.getPacket(), entry.getVolumePercent(), entry.getProperties());
                     MinecraftForge.EVENT_BUS.post(event);
                     if(!event.isCanceled())
                     {
@@ -43,14 +44,14 @@ public class SpeakerBufferPusher implements NoExceptionCloseable
         });
     }
 
-    public void decodePush(byte[] opusPacket, int volumePercent)
+    public void decodePush(byte[] opusPacket, int volumePercent, VoiceProperties properties)
     {
-        push(decoder.decoder(opusPacket), volumePercent);
+        push(decoder.decoder(opusPacket), volumePercent, properties);
     }
 
-    private void push(byte[] packet, int volumePercent)
+    private void push(byte[] packet, int volumePercent, VoiceProperties properties)
     {
-        buffer.pushPacket(packet, volumePercent);
+        buffer.pushPacket(packet, volumePercent, properties);
     }
 
     @Override

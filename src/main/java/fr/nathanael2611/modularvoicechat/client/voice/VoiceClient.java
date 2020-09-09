@@ -40,7 +40,7 @@ public class VoiceClient
             {
                 try
                 {
-                    client.connect(5000, host, port);
+                    client.connect(5000, host, port + 1, port);
                     if (VoiceClientManager.isStarted())
                     {
                         Helpers.log("Try authenticate with username " + playerName);
@@ -63,7 +63,7 @@ public class VoiceClient
      */
     public void send(Object object)
     {
-        this.client.sendTCP(object);
+        this.client.sendUDP(object);
     }
 
     /**

@@ -1,5 +1,7 @@
 package fr.nathanael2611.modularvoicechat.audio.speaker;
 
+import fr.nathanael2611.modularvoicechat.api.VoiceProperties;
+
 import java.util.concurrent.*;
 
 /**
@@ -27,9 +29,9 @@ public class SpeakerBuffer
         }
     }
 
-    public void pushPacket(byte[] packet, int volumePercent)
+    public void pushPacket(byte[] packet, int volumePercent, VoiceProperties properties)
     {
-        AudioEntry entry = new AudioEntry(packet, volumePercent);
+        AudioEntry entry = new AudioEntry(packet, volumePercent, properties);
         if (!queue.offer(entry))
         {
             queue.poll();
@@ -41,11 +43,13 @@ public class SpeakerBuffer
     {
         private byte[] packet;
         private int volumePercent;
+        private VoiceProperties properties;
 
-        AudioEntry(byte[] packet, int volumePercent)
+        AudioEntry(byte[] packet, int volumePercent, VoiceProperties properties)
         {
             this.packet = packet;
             this.volumePercent = volumePercent;
+            this.properties = properties;
         }
 
         int getVolumePercent()
@@ -56,6 +60,11 @@ public class SpeakerBuffer
         byte[] getPacket()
         {
             return packet;
+        }
+
+        VoiceProperties getProperties()
+        {
+            return properties;
         }
     }
 

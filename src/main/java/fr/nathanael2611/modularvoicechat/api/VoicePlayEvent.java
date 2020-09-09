@@ -7,11 +7,13 @@ public class VoicePlayEvent extends Event
 
     private byte[] recordedSamples;
     private int volumePercent;
+    private VoiceProperties properties;
 
-    public VoicePlayEvent(byte[] recordedSamples, int volumePercent)
+    public VoicePlayEvent(byte[] recordedSamples, int volumePercent, VoiceProperties properties)
     {
         this.recordedSamples = recordedSamples;
         this.volumePercent = volumePercent;
+        this.properties = properties;
     }
 
     @Override
@@ -40,4 +42,8 @@ public class VoicePlayEvent extends Event
         this.volumePercent = volumePercent;
     }
 
+    public VoiceProperties getProperties()
+    {
+        return properties;
+    }
 }

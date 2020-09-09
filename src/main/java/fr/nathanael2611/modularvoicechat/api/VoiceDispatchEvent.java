@@ -60,6 +60,11 @@ public class VoiceDispatchEvent extends PlayerEvent
         return voiceServer;
     }
 
+    private VoiceToClient getPacket(int volume, VoiceProperties properties)
+    {
+        return new VoiceToClient(this.getEntityPlayer().getEntityId(), this.voiceData, volume, properties);
+    }
+
     /**
      * Simply return a new voice-packet for the given volume
      * @param volume the volume that we want the audio-data to be played
@@ -67,7 +72,7 @@ public class VoiceDispatchEvent extends PlayerEvent
      */
     private VoiceToClient getPacket(int volume)
     {
-        return new VoiceToClient(this.getEntityPlayer().getEntityId(), this.voiceData, volume);
+        return new VoiceToClient(this.getEntityPlayer().getEntityId(), this.voiceData, volume, VoiceProperties.empty());
     }
 
     /**
@@ -86,7 +91,12 @@ public class VoiceDispatchEvent extends PlayerEvent
      */
     public void dispatchTo(EntityPlayerMP playerMP, int voiceVolume)
     {
-        this.voiceServer.send(playerMP, getPacket(voiceVolume));
+        this.dispatchTo(playerMP, voiceVolume, VoiceProperties.empty());
+    }
+
+    public void dispatchTo(EntityPlayerMP playerMP, int voiceVolume, VoiceProperties properties)
+    {
+        this.voiceServer.send(playerMP, getPacket(voiceVolume, properties));
     }
 
     /**
@@ -103,7 +113,16 @@ public class VoiceDispatchEvent extends PlayerEvent
      */
     public void dispatchToAllExceptSpeaker(int voiceVolume)
     {
-        this.voiceServer.sendToAllExcept(this.speaker, getPacket(voiceVolume));
+        this.dispatchToAllExceptSpeaker(voiceVolume, VoiceProperties.empty());
+    }
+
+    /**
+     * Send audio-data to all player, except a specific one
+     * @param voiceVolume the custom volume that we want the audio-data to be played
+     */
+    public void dispatchToAllExceptSpeaker(int voiceVolume, VoiceProperties properties)
+    {
+        this.voiceServer.sendToAllExcept(this.speaker, getPacket(voiceVolume, properties));
     }
 
 

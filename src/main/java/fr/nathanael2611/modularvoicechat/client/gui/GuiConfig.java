@@ -94,11 +94,7 @@ public class GuiConfig extends GuiScreen
     protected void actionPerformed(GuiButton button) throws IOException
     {
         super.actionPerformed(button);
-        if(button.id == 1)
-        {
-            Desktop.getDesktop().browse(URI.create(ModularVoiceChat.DISCORD_INVITE));
-        }
-        else if(button instanceof GuiDropDownMenu)
+        if(button instanceof GuiDropDownMenu)
         {
             GuiDropDownMenu drop = (GuiDropDownMenu) button;
             if(drop == this.microSelector)
@@ -115,6 +111,13 @@ public class GuiConfig extends GuiScreen
                 drop.displayString = drop.getSelectedText();
             }
             drop.dropDownMenu = !drop.dropDownMenu;
+        }
+        else
+        {
+            if(button.id == 1 && !this.speakerSelector.dropDownMenu && !this.microSelector.dropDownMenu)
+            {
+                Desktop.getDesktop().browse(URI.create(ModularVoiceChat.DISCORD_INVITE));
+            }
         }
     }
 

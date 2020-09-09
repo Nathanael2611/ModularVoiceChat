@@ -1,5 +1,6 @@
 package fr.nathanael2611.modularvoicechat.audio.speaker;
 
+import fr.nathanael2611.modularvoicechat.api.VoiceProperties;
 import fr.nathanael2611.modularvoicechat.audio.api.NoExceptionCloseable;
 import fr.nathanael2611.modularvoicechat.util.ThreadUtil;
 
@@ -27,11 +28,11 @@ public class SpeakerPlayer implements NoExceptionCloseable
         bufferMap = new HashMap<>();
     }
 
-    public void accept(int id, byte[] opusPacket, int volumePercent)
+    public void accept(int id, byte[] opusPacket, int volumePercent, VoiceProperties properties)
     {
         if (speakerData.isAvailable(id))
         {
-            bufferMap.computeIfAbsent(id, $ -> new SpeakerBufferPusher(executor, id, speakerData)).decodePush(opusPacket, volumePercent);
+            bufferMap.computeIfAbsent(id, $ -> new SpeakerBufferPusher(executor, id, speakerData)).decodePush(opusPacket, volumePercent, properties);
         }
     }
 
