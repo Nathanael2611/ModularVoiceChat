@@ -6,6 +6,7 @@ import fr.nathanael2611.modularvoicechat.client.gui.GuiConfig;
 import fr.nathanael2611.modularvoicechat.client.voice.VoiceClientManager;
 import fr.nathanael2611.modularvoicechat.client.voice.audio.MicroManager;
 import fr.nathanael2611.modularvoicechat.client.voice.audio.SpeakerManager;
+import fr.nathanael2611.modularvoicechat.config.ClientConfig;
 import fr.nathanael2611.modularvoicechat.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -79,14 +80,17 @@ public class ClientEventHandler
             ScaledResolution resolution = event.getResolution();
             if (VoiceClientManager.isStarted() && MicroManager.isRunning() && VoiceClientManager.getClient().isConnected())
             {
-                GlStateManager.pushMatrix();
-                GlStateManager.translate(resolution.getScaledWidth() - 32, resolution.getScaledHeight() - 32, 0);
-                this.alpha = Math.max(0f, Math.min(1, MicroManager.getHandler().isSending() ? this.alpha + 0.1f : this.alpha - 0.05f));
-                GlStateManager.color(1, 1, 1, alpha);
-                GlStateManager.scale(0.8, 0.8, 0.8);
-                mc.getTextureManager().bindTexture(MICRO);
-                Gui.drawModalRectWithCustomSizedTexture(0, 0, 0, 0, 32, 32, 32, 32);
-                GlStateManager.popMatrix();
+                if (!GuiConfig.audioTesting)
+                {
+                    GlStateManager.pushMatrix();
+                    GlStateManager.translate(resolution.getScaledWidth() - 32, resolution.getScaledHeight() - 32, 0);
+                    this.alpha = Math.max(0f, Math.min(1, MicroManager.getHandler().isSending() ? this.alpha + 0.1f : this.alpha - 0.05f));
+                    GlStateManager.color(1, 1, 1, alpha);
+                    GlStateManager.scale(0.8, 0.8, 0.8);
+                    mc.getTextureManager().bindTexture(MICRO);
+                    Gui.drawModalRectWithCustomSizedTexture(0, 0, 0, 0, 32, 32, 32, 32);
+                    GlStateManager.popMatrix();
+                }
             } else
             {
                 mc.fontRenderer.drawStringWithShadow(String.format("§c[%s] Not connected to vocal-server. Please try reconnecting.", ModularVoiceChat.MOD_NAME), 2, 2, Color.WHITE.getRGB());
@@ -109,17 +113,36 @@ public class ClientEventHandler
             if (ClientProxy.KEY_OPEN_CONFIG.isPressed() && MicroManager.isRunning() && SpeakerManager.isRunning())
             {
                 this.mc.displayGuiScreen(new GuiConfig());
-            } else if (Keyboard.isKeyDown(ClientProxy.KEY_SPEAK.getKeyCode()))
+            } else if (!GuiConfig.audioTesting)
             {
-                if (MicroManager.isRunning() && !MicroManager.getHandler().isSending())
+                if (ClientProxy.getConfig().get(ClientConfig.TOGGLE_TO_TALK).getAsBoolean())
                 {
-                    MicroManager.getHandler().start();
-                }
-            } else
-            {
-                if (MicroManager.isRunning() && MicroManager.getHandler().isSending())
+                    if (ClientProxy.KEY_SPEAK.isPressed())
+                    {
+                        if (MicroManager.isRunning() && !MicroManager.getHandler().isSending())
+                        {
+                            MicroManager.getHandler().start();
+                        } else
+                        {
+                            if (MicroManager.isRunning() && MicroManager.getHandler().isSending())
+                            {
+                                MicroManager.getHandler().stop();
+                            }
+                        }
+                    }
+
+                } else if (Keyboard.isKeyDown(ClientProxy.KEY_SPEAK.getKeyCode()))
                 {
-                    MicroManager.getHandler().stop();
+                    if (MicroManager.isRunning() && !MicroManager.getHandler().isSending())
+                    {
+                        MicroManager.getHandler().start();
+                    }
+                } else
+                {
+                    if (MicroManager.isRunning() && MicroManager.getHandler().isSending())
+                    {
+                        MicroManager.getHandler().stop();
+                    }
                 }
             }
         }

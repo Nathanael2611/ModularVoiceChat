@@ -4,6 +4,8 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import fr.nathanael2611.modularvoicechat.api.VoiceDispatchEvent;
 import fr.nathanael2611.modularvoicechat.network.objects.HelloImAPlayer;
+import fr.nathanael2611.modularvoicechat.network.objects.VoiceEndToClient;
+import fr.nathanael2611.modularvoicechat.network.objects.VoiceEndToServer;
 import fr.nathanael2611.modularvoicechat.network.objects.VoiceToServer;
 import fr.nathanael2611.modularvoicechat.util.Helpers;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -49,6 +51,10 @@ public class KryoNetServerListener extends Listener
                     event.getVoiceServer().getVoiceDispatcher().dispatch(event);
                 }
                 event.finalizeDispatch();
+            }
+            else if (object instanceof VoiceEndToServer)
+            {
+                this.voiceServer.sendToAllExcept(player, new VoiceEndToClient(player.getEntityId()));
             }
         }
         super.received(connection, object);

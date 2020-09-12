@@ -18,6 +18,9 @@ public class KryoObjects
         kryo.register(VoiceProperties.class);
         kryo.register(HashMap.class, new MapSerializer());
         kryo.register(VoiceToServer.class);
+        kryo.register(VoiceEndToServer.class);
+        kryo.register(VoiceEndToClient.class);
+
     }
 
 }

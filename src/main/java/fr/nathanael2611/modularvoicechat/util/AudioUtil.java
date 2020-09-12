@@ -1,9 +1,14 @@
 package fr.nathanael2611.modularvoicechat.util;
 
-import java.nio.*;
-import java.util.*;
-
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Line;
+import javax.sound.sampled.Mixer;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AudioUtil
 {
@@ -94,5 +99,70 @@ public class AudioUtil
         }
         return array;
     }
+
+
+    public static double calculateRms(byte[] samples)
+    {
+        double sumOfSampleSq = 0.0;    // sum of square of normalized samples.
+        double peakSample = 0.0;     // peak sample.
+
+        for (short sample : samples)
+        {
+            double normSample = (double) sample / 32767;  // normalized the sample with maximum value.
+            sumOfSampleSq += (normSample * normSample);
+            if (Math.abs(sample) > peakSample)
+            {
+                peakSample = Math.abs(sample);
+            }
+        }
+
+        double rms = 10 * Math.log10(sumOfSampleSq / samples.length);
+        double peak = 20 * Math.log10(peakSample / 32767);
+        return rms;
+    }
+
+    public static short[] bytesToShorts(byte[] bytes)
+    {
+        short[] shorts = new short[bytes.length / 2];
+        ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(shorts);
+        return shorts;
+    }
+
+    public static byte[] shortsToBytes(short[] shorts)
+    {
+        byte[] bytes2 = new byte[shorts.length * 2];
+        ByteBuffer.wrap(bytes2).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(shorts);
+        return bytes2;
+    }
+
+    public static float getdB(byte[] buffer)
+    {
+        double dB = 0.0D;
+        short[] shortArray = new short[buffer.length / 2];
+        ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(shortArray);
+
+        for (int i = 0; i < shortArray.length; ++i)
+        {
+            dB = 20.0D * Math.log10(Math.abs((double) shortArray[i] / 32767.0D));
+            if (dB == -1.0D / 0.0 || dB == 0.0D / 0.0)
+            {
+                dB = -90.0D;
+            }
+        }
+
+        float level = (float) dB;
+        return level;
+    }
+
+    /*
+    public static byte[] adjustPitch(byte[] input, float pitch)
+    {
+        double f = pitch;
+        byte[] output = new byte[ceil(input / f)];
+        output[0] = input[0]
+        for(int i = 1; i < output.length) {
+            output[i] = (input[floor(i*factor)] + input[ceil(i*factor)]) / 2;
+        }
+    }*/
 
 }

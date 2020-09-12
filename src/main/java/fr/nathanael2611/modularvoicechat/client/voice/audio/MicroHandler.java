@@ -1,8 +1,12 @@
 package fr.nathanael2611.modularvoicechat.client.voice.audio;
 
 import com.google.gson.JsonPrimitive;
+import fr.nathanael2611.modularvoicechat.api.VoiceProperties;
+import fr.nathanael2611.modularvoicechat.audio.AudioTester;
+import fr.nathanael2611.modularvoicechat.client.gui.GuiConfig;
 import fr.nathanael2611.modularvoicechat.client.voice.VoiceClientManager;
 import fr.nathanael2611.modularvoicechat.config.ClientConfig;
+import fr.nathanael2611.modularvoicechat.network.objects.VoiceEndToServer;
 import fr.nathanael2611.modularvoicechat.network.objects.VoiceToServer;
 import fr.nathanael2611.modularvoicechat.proxy.ClientProxy;
 import fr.nathanael2611.modularvoicechat.audio.api.NoExceptionCloseable;
@@ -17,19 +21,41 @@ public class MicroHandler implements NoExceptionCloseable
     private final MicroData data;
     private final MicroRecorder recorder;
 
-    MicroHandler()
+    public MicroHandler()
     {
         this.config = ClientProxy.getConfig();
         this.data = new MicroData(this.config.get(ClientConfig.MICROPHONE).getAsString(), this.config.get(ClientConfig.MICROPHONE_VOLUME).getAsInt());
         this.recorder = new MicroRecorder(data, this::sendVoicePacket, config.get(ClientConfig.BITRATE).getAsInt());
     }
 
-    private void sendVoicePacket(byte[] opusPacket)
+    private boolean lastAudioTesting = false;
+
+    public void sendVoicePacket(byte[] opusPacket)
     {
         if (VoiceClientManager.isStarted())
         {
-            VoiceClientManager.getClient().send(new VoiceToServer(opusPacket));
+            if(GuiConfig.audioTesting && opusPacket != null)
+            {
+                AudioTester.speaker.receiveVoicePacket(0, opusPacket, 100, VoiceProperties.empty());
+            }
+            else if(this.lastAudioTesting || opusPacket == null)
+            {
+                AudioTester.speaker.receiveEnd(0);
+                this.lastAudioTesting = false;
+            }
+            else
+            {
+                if(opusPacket == null)
+                {
+                    VoiceClientManager.getClient().send(new VoiceEndToServer());
+                }
+                else
+                {
+                    VoiceClientManager.getClient().send(new VoiceToServer(opusPacket));
+                }
+            }
         }
+        this.lastAudioTesting = GuiConfig.audioTesting;
     }
 
     public void start()
@@ -40,6 +66,10 @@ public class MicroHandler implements NoExceptionCloseable
     public void stop()
     {
         recorder.stop();
+        if (!GuiConfig.audioTesting)
+        {
+            this.sendVoicePacket(null);
+        }
     }
 
     public boolean isSending()

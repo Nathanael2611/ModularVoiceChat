@@ -14,6 +14,7 @@ import java.util.HashMap;
 public class VoiceDispatchEvent extends PlayerEvent
 {
 
+    /* This list will contain all packets waiting to be sent when the finalize() method will be called */
     private HashMap<EntityPlayerMP, VoiceToClient> hearList = Maps.newHashMap();
 
     /* The speaker (sender of the audio-data) */
@@ -65,6 +66,12 @@ public class VoiceDispatchEvent extends PlayerEvent
         return voiceServer;
     }
 
+    /**
+     * Simply return a new voice-packet for the given volume
+     * @param volume the volume that we want the audio-data to be played
+     * @param properties the VoiceProperties that we want to send with the audio-data
+     * @return the created packet
+     */
     private VoiceToClient getPacket(int volume, VoiceProperties properties)
     {
         return new VoiceToClient(this.getEntityPlayer().getEntityId(), this.voiceData, volume, properties);
@@ -99,11 +106,24 @@ public class VoiceDispatchEvent extends PlayerEvent
         this.dispatchTo(playerMP, voiceVolume, VoiceProperties.empty());
     }
 
+    /**
+     * Send voice-data to a specific player, with custom volume and properties
+     * @param playerMP the player that we want to send the audio-data
+     * @param voiceVolume the custom volume that we want the audio-data to be played
+     * @param properties the VoiceProperties that we want to send with the audio-data
+     */
     public void dispatchTo(EntityPlayerMP playerMP, int voiceVolume, VoiceProperties properties)
     {
         this.dispatchTo(playerMP, voiceVolume, properties, false);
     }
 
+    /**
+     * Send voice-data to a specific player, with custom volume, properties, and override
+     * @param playerMP the player that we want to send the audio-data
+     * @param voiceVolume the custom volume that we want the audio-data to be played
+     * @param properties the VoiceProperties that we want to send with the audio-data
+     * @param forceOverride if the audio-data still overwrites the old one
+     */
     public void dispatchTo(EntityPlayerMP playerMP, int voiceVolume, VoiceProperties properties, boolean forceOverride)
     {
         VoiceToClient packet = getPacket(voiceVolume, properties);
@@ -134,6 +154,11 @@ public class VoiceDispatchEvent extends PlayerEvent
         this.dispatchToAllExceptSpeaker(voiceVolume, VoiceProperties.empty());
     }
 
+    /**
+     * Send audio-data to all player, except a specific one
+     * @param voiceVolume the custom volume that we want the audio-data to be played
+     * @param properties the VoiceProperties that we want to send with audio-data
+     */
     public void dispatchToAllExceptSpeaker(int voiceVolume, VoiceProperties properties)
     {
         this.dispatchToAllExceptSpeaker(voiceVolume, properties, false);
@@ -142,6 +167,8 @@ public class VoiceDispatchEvent extends PlayerEvent
     /**
      * Send audio-data to all player, except a specific one
      * @param voiceVolume the custom volume that we want the audio-data to be played
+     * @param properties the VoiceProperties that we want to send with audio-data
+     * @param forceOverride if the audio-data still overwrites the old one
      */
     public void dispatchToAllExceptSpeaker(int voiceVolume, VoiceProperties properties, boolean forceOverride)
     {
@@ -152,12 +179,12 @@ public class VoiceDispatchEvent extends PlayerEvent
     }
 
     /**
-     * THIS METHOD DO NOT HAVE TO BE USED BY API.
+     * Just finalize the dispatching. Called after the event.
+     * Do not use in the event!
      */
     public void finalizeDispatch()
     {
         this.hearList.forEach((player, packet)-> this.voiceServer.send(player, packet));
     }
-
 
 }

@@ -75,22 +75,32 @@ public class PacketConnectVoice implements IMessage
         {
             if (Minecraft.getMinecraft().getCurrentServerData() != null && !Minecraft.getMinecraft().getCurrentServerData().isOnLAN())
             {
-                if (VoiceClientManager.isStarted())
-                {
-                    VoiceClientManager.stop();
-                }
-                if (MicroManager.isRunning())
-                {
-                    MicroManager.stop();
-                }
-                if (SpeakerManager.isRunning())
-                {
-                    SpeakerManager.stop();
-                }
-                VoiceClientManager.start(message.playerName, Minecraft.getMinecraft().getCurrentServerData().serverIP.split(":")[0], message.port);
-                MicroManager.start();
-                SpeakerManager.start();
-                Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§2[" + ModularVoiceChat.MOD_NAME + "] §aSuccessfully established connection with voice-server!"));
+                new Thread(()->{
+                    try
+                    {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    if (VoiceClientManager.isStarted())
+                    {
+                        VoiceClientManager.stop();
+                    }
+                    if (MicroManager.isRunning())
+                    {
+                        MicroManager.stop();
+                    }
+                    if (SpeakerManager.isRunning())
+                    {
+                        SpeakerManager.stop();
+                    }
+                    VoiceClientManager.start(message.playerName, Minecraft.getMinecraft().getCurrentServerData().serverIP.split(":")[0], message.port);
+                    MicroManager.start();
+                    SpeakerManager.start();
+                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§2[" + ModularVoiceChat.MOD_NAME + "] §aSuccessfully established connection with voice-server!"));
+
+                }).start();
             }
             return null;
         }

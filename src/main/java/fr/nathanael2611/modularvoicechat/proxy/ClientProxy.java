@@ -1,6 +1,7 @@
 package fr.nathanael2611.modularvoicechat.proxy;
 
 import fr.nathanael2611.modularvoicechat.ModularVoiceChat;
+import fr.nathanael2611.modularvoicechat.audio.AudioTester;
 import fr.nathanael2611.modularvoicechat.client.ClientEventHandler;
 import fr.nathanael2611.modularvoicechat.config.ClientConfig;
 import fr.nathanael2611.modularvoicechat.util.OpusLoader;
@@ -40,6 +41,8 @@ public class ClientProxy extends CommonProxy
             JOptionPane.showMessageDialog(null, "\n" + "Opus initialization failed. ModularVoiceChat will not work.", "Opus initialization error", JOptionPane.ERROR_MESSAGE);
             FMLCommonHandler.instance().exitJava(0, true);
         }
+
+        AudioTester.start();
     }
 
     @Override

@@ -32,12 +32,19 @@ public class SpeakerBufferPusher implements NoExceptionCloseable
                 if (speakerData.isAvailable(id) && speakerData.freeBuffer(id) > 0)
                 {
                     SpeakerBuffer.AudioEntry entry = buffer.getNextPacket();
-
-                    VoicePlayEvent event = new VoicePlayEvent(entry.getPacket(), entry.getVolumePercent(), entry.getProperties());
-                    MinecraftForge.EVENT_BUS.post(event);
-                    if(!event.isCanceled())
+                    if(entry.isEnd())
                     {
-                        speakerData.write(id, event.getRecordedSamples(), event.getVolumePercent());
+                        speakerData.flush(id);
+                        //speakerData.setVolume(0);
+                    }
+                    else
+                    {
+                        VoicePlayEvent event = new VoicePlayEvent(entry.getPacket(), entry.getVolumePercent(), entry.getProperties());
+                        MinecraftForge.EVENT_BUS.post(event);
+                        if (!event.isCanceled())
+                        {
+                            speakerData.write(id, event.getAudioSamples(), event.getVolumePercent());
+                        }
                     }
                 }
             }
@@ -52,6 +59,11 @@ public class SpeakerBufferPusher implements NoExceptionCloseable
     private void push(byte[] packet, int volumePercent, VoiceProperties properties)
     {
         buffer.pushPacket(packet, volumePercent, properties);
+    }
+
+    public void end()
+    {
+        buffer.pushEnd();
     }
 
     @Override

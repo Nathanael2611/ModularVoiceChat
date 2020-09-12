@@ -144,6 +144,7 @@ public class SpeakerData implements NoExceptionCloseable
             array = AudioUtil.adjustVolume(array, vol);
             lineInfo.setMasterVolume(volumePercent);
             lineInfo.getSourceDataLine().write(array, 0, array.length);
+            //lineInfo.getSourceDataLine().drain();
         }
         return array;
     }

@@ -1,6 +1,8 @@
 package fr.nathanael2611.modularvoicechat.client.gui;
 
+import com.google.gson.JsonPrimitive;
 import fr.nathanael2611.modularvoicechat.ModularVoiceChat;
+import fr.nathanael2611.modularvoicechat.audio.AudioTester;
 import fr.nathanael2611.modularvoicechat.client.ClientEventHandler;
 import fr.nathanael2611.modularvoicechat.client.voice.audio.MicroManager;
 import fr.nathanael2611.modularvoicechat.client.voice.audio.SpeakerManager;
@@ -23,6 +25,8 @@ import java.net.URI;
 public class GuiConfig extends GuiScreen
 {
 
+    public static boolean audioTesting = false;
+
     private ClientConfig config;
 
     public GuiConfig()
@@ -34,18 +38,29 @@ public class GuiConfig extends GuiScreen
     private GuiDropDownMenu speakerSelector;
     private GuiConfigSlider microVolume;
     private GuiConfigSlider speakerVolume;
+    private GuiButton toggleToTalk;
+    private GuiButton audioTest;
 
     @Override
     public void initGui()
     {
         super.initGui();
         buttonList.clear();
+        audioTesting = false;
+        AudioTester.updateTester();
         int y = 80 + 20;
         this.buttonList.add(this.microVolume = new GuiConfigSlider(this, 12, width / 2 - 150 - 5, y + 25, ClientConfig.MICROPHONE_VOLUME, 0, 150));
         this.buttonList.add(this.speakerVolume = new GuiConfigSlider(this, 12, width/ 2 + 5, y + 25, ClientConfig.SPEAKER_VOLUME, 0, 150));
-        this.buttonList.add(new GuiButton(1, width / 2 - 155, y + 50,150 + 5 + 5 + 150, 20, "Rejoindre le discord de " + ModularVoiceChat.MOD_NAME));
+        this.buttonList.add(this.toggleToTalk = new GuiButton(13, width / 2 - 150 - 5, y + 50, 150, 20, "Mode: " + getSpeakMode()));
+        this.buttonList.add(this.audioTest = new GuiButton(14, width / 2 + 5, y + 50, 150, 20, (audioTesting ? "Test audio en cours" : "Tester l'audio")));
+        this.buttonList.add(new GuiButton(1, width / 2 - 155, y + 50 + 25,150 + 5 + 5 + 150, 20, "Rejoindre le discord de " + ModularVoiceChat.MOD_NAME));
         this.buttonList.add(this.microSelector = new GuiDropDownMenu(12, width / 2 - 150 - 4, y, 148, 20, MicroManager.getHandler().getMicro(), Helpers.getStringListAsArray(AudioUtil.findAudioDevices(MicroData.MIC_INFO))));
         this.buttonList.add(this.speakerSelector = new GuiDropDownMenu(13, width / 2 + 6, y, 148, 20, SpeakerManager.getHandler().getSpeaker(), Helpers.getStringListAsArray(AudioUtil.findAudioDevices(SpeakerData.SPEAKER_INFO))));
+    }
+
+    public String getSpeakMode()
+    {
+        return this.config.get(ClientConfig.TOGGLE_TO_TALK).getAsBoolean() ? "Activer-pour-parler" : "Appuyer-pour-parler";
     }
 
     @Override
@@ -112,9 +127,21 @@ public class GuiConfig extends GuiScreen
             }
             drop.dropDownMenu = !drop.dropDownMenu;
         }
-        else
+        else if(!this.speakerSelector.dropDownMenu && !this.microSelector.dropDownMenu)
         {
-            if(button.id == 1 && !this.speakerSelector.dropDownMenu && !this.microSelector.dropDownMenu)
+            if(button == this.toggleToTalk)
+            {
+                this.config.set(ClientConfig.TOGGLE_TO_TALK, new JsonPrimitive(!this.config.get(ClientConfig.TOGGLE_TO_TALK).getAsBoolean()));
+                button.displayString = "Mode: " + getSpeakMode();
+            }
+            if(button == this.audioTest)
+            {
+                audioTesting = !audioTesting;
+
+                button.displayString = (audioTesting ? "Test audio en cours" : "Tester l'audio");
+                AudioTester.updateTester();
+            }
+            else if(button.id == 1 )
             {
                 Desktop.getDesktop().browse(URI.create(ModularVoiceChat.DISCORD_INVITE));
             }
@@ -124,5 +151,13 @@ public class GuiConfig extends GuiScreen
     public boolean canChangeVolume()
     {
         return !(this.microSelector.isMouseOver() || this.speakerSelector.isMouseOver());
+    }
+
+    @Override
+    public void onGuiClosed()
+    {
+        audioTesting = false;
+        AudioTester.updateTester();
+
     }
 }

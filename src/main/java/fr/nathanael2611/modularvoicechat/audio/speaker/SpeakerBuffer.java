@@ -39,17 +39,42 @@ public class SpeakerBuffer
         }
     }
 
+    public void pushEnd()
+    {
+        AudioEntry entry= new AudioEntry(true);
+        if(!queue.offer(entry))
+        {
+            queue.poll();
+            queue.offer(entry);
+        }
+    }
+
     static class AudioEntry
     {
         private byte[] packet;
         private int volumePercent;
         private VoiceProperties properties;
 
+        private boolean end;
+
         AudioEntry(byte[] packet, int volumePercent, VoiceProperties properties)
         {
             this.packet = packet;
             this.volumePercent = volumePercent;
             this.properties = properties;
+        }
+
+        AudioEntry(boolean end)
+        {
+            this.end = end;
+            this.packet = null;
+            this.volumePercent = 0;
+            this.properties = null;
+        }
+
+        public boolean isEnd()
+        {
+            return end;
         }
 
         int getVolumePercent()

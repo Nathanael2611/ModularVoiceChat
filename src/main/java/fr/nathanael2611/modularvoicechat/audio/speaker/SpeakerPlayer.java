@@ -32,7 +32,14 @@ public class SpeakerPlayer implements NoExceptionCloseable
     {
         if (speakerData.isAvailable(id))
         {
-            bufferMap.computeIfAbsent(id, $ -> new SpeakerBufferPusher(executor, id, speakerData)).decodePush(opusPacket, volumePercent, properties);
+            if(opusPacket == null)
+            {
+                bufferMap.computeIfAbsent(id, $ -> new SpeakerBufferPusher(executor, id, speakerData)).end();
+            }
+            else
+            {
+                bufferMap.computeIfAbsent(id, $ -> new SpeakerBufferPusher(executor, id, speakerData)).decodePush(opusPacket, volumePercent, properties);
+            }
         }
     }
 

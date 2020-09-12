@@ -16,7 +16,7 @@ public class SpeakerHandler implements NoExceptionCloseable
     private final SpeakerData data;
     private final SpeakerPlayer player;
 
-    SpeakerHandler()
+    public SpeakerHandler()
     {
         this.config = ClientProxy.getConfig();
         data = new SpeakerData(config.get(ClientConfig.SPEAKER).getAsString(), config.get(ClientConfig.SPEAKER_VOLUME).getAsInt());
@@ -27,6 +27,12 @@ public class SpeakerHandler implements NoExceptionCloseable
     {
         player.accept(id, opusPacket, volumePercent, properties);
     }
+
+    public void receiveEnd(int id)
+    {
+        player.accept(id, null, 0, null);
+    }
+
 
     public String getSpeaker()
     {
