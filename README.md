@@ -20,6 +20,9 @@ Les events client:
 
 Une liste plus détaillée des events et de leur utilisation est disponible sur le wiki du mod.
 
+# Téléchargement
+Avant que le développement du mod ne touche à sa fin, ou tout du moins qu'une première release soit publiée, celui-ci ne sera disponible que sur le discord!
+
 # Rejoindre la communauté
 En effet, le mod possède un serveur discord sur lequel vous pouvez venir discuter, et demander de l'aide par rapport à celui-ci.
 Je vous invite à le rejoindre!
