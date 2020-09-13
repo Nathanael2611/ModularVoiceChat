@@ -23,6 +23,8 @@ public class VoiceDispatchEvent extends PlayerEvent
     private VoiceServer voiceServer;
     /* encoded audio-data */
     private byte[] voiceData;
+    /* the VoiceProperties */
+    private VoiceProperties properties;
 
     /**
      * Constructor
@@ -30,12 +32,13 @@ public class VoiceDispatchEvent extends PlayerEvent
      * @param speaker Sender that the audio-data come from
      * @param voiceData Encoded voice-data
      */
-    public VoiceDispatchEvent(VoiceServer server, EntityPlayerMP speaker, byte[] voiceData)
+    public VoiceDispatchEvent(VoiceServer server, EntityPlayerMP speaker, byte[] voiceData, VoiceProperties properties)
     {
         super(speaker);
         this.speaker = speaker;
         this.voiceServer = server;
         this.voiceData = voiceData;
+        this.properties = properties;
     }
 
     /**
@@ -64,6 +67,16 @@ public class VoiceDispatchEvent extends PlayerEvent
     public VoiceServer getVoiceServer()
     {
         return voiceServer;
+    }
+
+    public VoiceProperties getProperties()
+    {
+        return properties;
+    }
+
+    public void setProperties(VoiceProperties properties)
+    {
+        this.properties = properties;
     }
 
     /**

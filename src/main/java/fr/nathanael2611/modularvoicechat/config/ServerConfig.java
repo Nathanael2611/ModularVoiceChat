@@ -18,6 +18,9 @@ public class ServerConfig
         @Config.Comment("The vocal-server port")
         public int port = ModularVoiceChat.DEFAULT_PORT;
 
+        @Config.Comment("Define if the micro on the speaking-players will be rendered.")
+        public boolean showWhoSpeak = false;
+
         @Config.Comment("The used voice-dispatcher")
         public Dispatcher dispatcher = new Dispatcher();
     }

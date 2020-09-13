@@ -3,6 +3,7 @@ package fr.nathanael2611.modularvoicechat.server;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import fr.nathanael2611.modularvoicechat.api.VoiceDispatchEvent;
+import fr.nathanael2611.modularvoicechat.api.VoiceProperties;
 import fr.nathanael2611.modularvoicechat.network.objects.HelloImAPlayer;
 import fr.nathanael2611.modularvoicechat.network.objects.VoiceEndToClient;
 import fr.nathanael2611.modularvoicechat.network.objects.VoiceEndToServer;
@@ -44,7 +45,7 @@ public class KryoNetServerListener extends Listener
             if (object instanceof VoiceToServer)
             {
                 VoiceToServer voiceToServer = (VoiceToServer) object;
-                VoiceDispatchEvent event = new VoiceDispatchEvent(voiceServer, player, voiceToServer.opusBytes);
+                VoiceDispatchEvent event = new VoiceDispatchEvent(voiceServer, player, voiceToServer.opusBytes, VoiceProperties.empty());
                 MinecraftForge.EVENT_BUS.post(event);
                 if(!event.isCanceled())
                 {

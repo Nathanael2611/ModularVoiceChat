@@ -1,6 +1,7 @@
 package fr.nathanael2611.modularvoicechat.network.vanilla;
 
 import fr.nathanael2611.modularvoicechat.ModularVoiceChat;
+import fr.nathanael2611.modularvoicechat.client.ClientEventHandler;
 import fr.nathanael2611.modularvoicechat.client.voice.VoiceClientManager;
 import fr.nathanael2611.modularvoicechat.client.voice.audio.MicroManager;
 import fr.nathanael2611.modularvoicechat.client.voice.audio.SpeakerManager;
@@ -26,6 +27,8 @@ public class PacketConnectVoice implements IMessage
     private int port;
     /* Player to link name */
     private String playerName;
+    /* Show who speak */
+    private boolean showWhoSpeak;
 
     /**
      * Constructor
@@ -39,10 +42,11 @@ public class PacketConnectVoice implements IMessage
      * Constructor
      * @param port VoiceServer port
      */
-    public PacketConnectVoice(int port, String playerName)
+    public PacketConnectVoice(int port, String playerName, boolean showWhoSpeak)
     {
         this.port = port;
         this.playerName = playerName;
+        this.showWhoSpeak = showWhoSpeak;
     }
 
     /**
@@ -54,6 +58,7 @@ public class PacketConnectVoice implements IMessage
     {
         this.port = buf.readInt();
         this.playerName = ByteBufUtils.readUTF8String(buf);
+        this.showWhoSpeak = buf.readBoolean();
     }
 
     /**
@@ -65,6 +70,7 @@ public class PacketConnectVoice implements IMessage
     {
         buf.writeInt(this.port);
         ByteBufUtils.writeUTF8String(buf, this.playerName);
+        buf.writeBoolean(this.showWhoSpeak);
     }
 
     public static class Message implements IMessageHandler<PacketConnectVoice, IMessage>
@@ -98,8 +104,7 @@ public class PacketConnectVoice implements IMessage
                     VoiceClientManager.start(message.playerName, Minecraft.getMinecraft().getCurrentServerData().serverIP.split(":")[0], message.port);
                     MicroManager.start();
                     SpeakerManager.start();
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§2[" + ModularVoiceChat.MOD_NAME + "] §aSuccessfully established connection with voice-server!"));
-
+                    ClientEventHandler.showWhoSpeak = message.showWhoSpeak;
                 }).start();
             }
             return null;

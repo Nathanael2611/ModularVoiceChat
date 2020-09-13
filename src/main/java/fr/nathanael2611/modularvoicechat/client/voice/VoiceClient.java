@@ -1,10 +1,12 @@
 package fr.nathanael2611.modularvoicechat.client.voice;
 
 import com.esotericsoftware.kryonet.Client;
+import fr.nathanael2611.modularvoicechat.ModularVoiceChat;
 import fr.nathanael2611.modularvoicechat.network.objects.HelloImAPlayer;
 import fr.nathanael2611.modularvoicechat.network.objects.KryoObjects;
 import fr.nathanael2611.modularvoicechat.util.Helpers;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.TextComponentString;
 
 import java.io.IOException;
 
@@ -45,9 +47,11 @@ public class VoiceClient
                     {
                         Helpers.log("Try authenticate with username " + playerName);
                         VoiceClientManager.getClient().authenticate(playerName);
+                        Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§2[" + ModularVoiceChat.MOD_NAME + "] §aSuccessfully established connection with voice-server!"));
                     }
                 } catch (IOException e)
                 {
+                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§4[" + ModularVoiceChat.MOD_NAME + "] §cCannot connect to voice-server, try reconnecting! (or see logs for complete error)"));
                     e.printStackTrace();
                 }
             }

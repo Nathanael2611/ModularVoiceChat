@@ -1,6 +1,8 @@
 package fr.nathanael2611.modularvoicechat.client.voice.audio;
 
 import com.google.gson.JsonPrimitive;
+import fr.nathanael2611.modularvoicechat.api.StartVoiceRecordEvent;
+import fr.nathanael2611.modularvoicechat.api.StopVoiceRecordEvent;
 import fr.nathanael2611.modularvoicechat.api.VoiceProperties;
 import fr.nathanael2611.modularvoicechat.audio.AudioTester;
 import fr.nathanael2611.modularvoicechat.client.gui.GuiConfig;
@@ -12,6 +14,8 @@ import fr.nathanael2611.modularvoicechat.proxy.ClientProxy;
 import fr.nathanael2611.modularvoicechat.audio.api.NoExceptionCloseable;
 import fr.nathanael2611.modularvoicechat.audio.micro.MicroData;
 import fr.nathanael2611.modularvoicechat.audio.micro.MicroRecorder;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.MinecraftForge;
 
 public class MicroHandler implements NoExceptionCloseable
 {
@@ -60,11 +64,19 @@ public class MicroHandler implements NoExceptionCloseable
 
     public void start()
     {
+        if(Minecraft.getMinecraft().player != null)
+        {
+            MinecraftForge.EVENT_BUS.post(new StartVoiceRecordEvent());
+        }
         recorder.start();
     }
 
     public void stop()
     {
+        if(Minecraft.getMinecraft().player != null)
+        {
+            MinecraftForge.EVENT_BUS.post(new StopVoiceRecordEvent());
+        }
         recorder.stop();
         if (!GuiConfig.audioTesting)
         {

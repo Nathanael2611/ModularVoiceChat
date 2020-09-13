@@ -1,9 +1,11 @@
 package fr.nathanael2611.modularvoicechat.server.dispatcher;
 
+import fr.nathanael2611.modularvoicechat.api.HearDistanceEvent;
 import fr.nathanael2611.modularvoicechat.api.VoiceDispatchEvent;
 import fr.nathanael2611.modularvoicechat.api.dispatcher.IVoiceDispatcher;
 import fr.nathanael2611.modularvoicechat.util.Helpers;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.common.MinecraftForge;
 
 public class DistanceBasedVoiceDispatcher implements IVoiceDispatcher
 {
@@ -25,10 +27,13 @@ public class DistanceBasedVoiceDispatcher implements IVoiceDispatcher
             if (connectedPlayer != event.getSpeaker())
             {
                 double distance = event.getSpeaker().getDistance(connectedPlayer);
-                if (distance <= this.maxDistance)
+                HearDistanceEvent hearDistanceEvent = new HearDistanceEvent(event.getSpeaker(), connectedPlayer, this.maxDistance);
+                MinecraftForge.EVENT_BUS.post(hearDistanceEvent);
+                double maxDistance = hearDistanceEvent.getDistance();
+                if (distance <= maxDistance)
                 {
-                    int volume = this.fadeOut ? 100 - (int) Helpers.getPercent(distance, this.maxDistance) : 100;
-                    event.dispatchTo(connectedPlayer, volume);
+                    int volume = this.fadeOut ? 100 - (int) Helpers.getPercent(distance, maxDistance) : 100;
+                    event.dispatchTo(connectedPlayer, volume, event.getProperties());
                 }
             }
         }

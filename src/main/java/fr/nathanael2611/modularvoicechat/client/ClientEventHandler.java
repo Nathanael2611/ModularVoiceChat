@@ -1,7 +1,6 @@
 package fr.nathanael2611.modularvoicechat.client;
 
 import fr.nathanael2611.modularvoicechat.ModularVoiceChat;
-import fr.nathanael2611.modularvoicechat.api.VoicePlayEvent;
 import fr.nathanael2611.modularvoicechat.client.gui.GuiConfig;
 import fr.nathanael2611.modularvoicechat.client.voice.VoiceClientManager;
 import fr.nathanael2611.modularvoicechat.client.voice.audio.MicroManager;
@@ -14,12 +13,13 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 
@@ -33,6 +33,8 @@ public class ClientEventHandler
      * Micro texture
      */
     public static final ResourceLocation MICRO = new ResourceLocation(ModularVoiceChat.MOD_ID, "textures/micro.png");
+
+    public static boolean showWhoSpeak = false;
 
     /* Simply store the Minecraft instance */
     private Minecraft mc;
@@ -98,6 +100,30 @@ public class ClientEventHandler
         }
     }
 
+    @SubscribeEvent
+    public void onRenderPlayer(final RenderPlayerEvent.Post event)
+    {
+        if (mc.gameSettings.hideGUI || !showWhoSpeak) return;
+        boolean flag = SpeakingPlayers.isTalking(event.getEntityPlayer());
+        if (flag)
+        {
+            final float factor = 0.01f;
+            double scale = 1.5;
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(event.getX(), event.getY() + ((event.getEntityPlayer().isSneaking() ? 2.4 : 2.5)), event.getZ());
+            GlStateManager.glNormal3f(1.0f, 1.0f, 1.0f);
+            GlStateManager.disableLighting();
+            GlStateManager.scale(-factor * scale, -factor * scale, -factor * scale);
+            GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0f, 1.0f, 0.0f);
+            GlStateManager.rotate(mc.getRenderManager().playerViewX, 1.0f, 0.0F, 0.0f);
+            mc.getTextureManager().bindTexture(MICRO);
+            Gui.drawModalRectWithCustomSizedTexture(-16, -16, 0, 0, 32, 32, 32, 32);
+            GlStateManager.enableLighting();
+            GlStateManager.popMatrix();
+        }
+
+    }
+
     /**
      * Used for handle different things. (Key, stopping, etc)
      */
@@ -106,9 +132,20 @@ public class ClientEventHandler
     {
         if (event.phase == TickEvent.Phase.START)
         {
-            if (VoiceClientManager.isStarted() && mc.getCurrentServerData() == null)
+            if (mc.getCurrentServerData() == null)
             {
-                VoiceClientManager.stop();
+                if(SpeakerManager.isRunning())
+                {
+                    SpeakerManager.stop();
+                }
+                if(MicroManager.isRunning())
+                {
+                    MicroManager.stop();
+                }
+                if(VoiceClientManager.isStarted())
+                {
+                    VoiceClientManager.stop();
+                }
             }
             if (ClientProxy.KEY_OPEN_CONFIG.isPressed() && MicroManager.isRunning() && SpeakerManager.isRunning())
             {
@@ -131,7 +168,7 @@ public class ClientEventHandler
                         }
                     }
 
-                } else if (Keyboard.isKeyDown(ClientProxy.KEY_SPEAK.getKeyCode()))
+                } else if (GameSettings.isKeyDown(ClientProxy.KEY_SPEAK))
                 {
                     if (MicroManager.isRunning() && !MicroManager.getHandler().isSending())
                     {

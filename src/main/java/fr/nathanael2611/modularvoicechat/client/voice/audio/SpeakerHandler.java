@@ -2,6 +2,7 @@ package fr.nathanael2611.modularvoicechat.client.voice.audio;
 
 import com.google.gson.JsonPrimitive;
 import fr.nathanael2611.modularvoicechat.api.VoiceProperties;
+import fr.nathanael2611.modularvoicechat.client.SpeakingPlayers;
 import fr.nathanael2611.modularvoicechat.config.ClientConfig;
 import fr.nathanael2611.modularvoicechat.proxy.ClientProxy;
 import fr.nathanael2611.modularvoicechat.audio.api.NoExceptionCloseable;
@@ -26,6 +27,7 @@ public class SpeakerHandler implements NoExceptionCloseable
     public void receiveVoicePacket(int id, byte[] opusPacket, int volumePercent, VoiceProperties properties)
     {
         player.accept(id, opusPacket, volumePercent, properties);
+        SpeakingPlayers.updateTalking(id);
     }
 
     public void receiveEnd(int id)

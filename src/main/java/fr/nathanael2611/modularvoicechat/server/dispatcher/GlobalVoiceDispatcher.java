@@ -9,7 +9,7 @@ public class GlobalVoiceDispatcher implements IVoiceDispatcher
     @Override
     public void dispatch(VoiceDispatchEvent event)
     {
-        event.dispatchToAllExceptSpeaker();
+        event.dispatchToAllExceptSpeaker(100, event.getProperties());
     }
 
 }
