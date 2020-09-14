@@ -10,12 +10,12 @@ import net.minecraftforge.common.MinecraftForge;
 public class DistanceBasedVoiceDispatcher implements IVoiceDispatcher
 {
 
-    private int maxDistance;
+    private final int MAX_DISTANCE;
     private boolean fadeOut;
 
     public DistanceBasedVoiceDispatcher(int maxDistance, boolean fadeOut)
     {
-        this.maxDistance = maxDistance;
+        this.MAX_DISTANCE = maxDistance;
         this.fadeOut = fadeOut;
     }
 
@@ -27,9 +27,7 @@ public class DistanceBasedVoiceDispatcher implements IVoiceDispatcher
             if (connectedPlayer != event.getSpeaker())
             {
                 double distance = event.getSpeaker().getDistance(connectedPlayer);
-                HearDistanceEvent hearDistanceEvent = new HearDistanceEvent(event.getSpeaker(), connectedPlayer, this.maxDistance);
-                MinecraftForge.EVENT_BUS.post(hearDistanceEvent);
-                double maxDistance = hearDistanceEvent.getDistance();
+                double maxDistance = this.getHearDistance(event.getSpeaker(), connectedPlayer);
                 if (distance <= maxDistance)
                 {
                     int volume = this.fadeOut ? 100 - (int) Helpers.getPercent(distance, maxDistance) : 100;
@@ -38,4 +36,12 @@ public class DistanceBasedVoiceDispatcher implements IVoiceDispatcher
             }
         }
     }
+
+    public double getHearDistance(EntityPlayerMP speaker, EntityPlayerMP hearer)
+    {
+        HearDistanceEvent hearDistanceEvent = new HearDistanceEvent(speaker, hearer, this.MAX_DISTANCE);
+        MinecraftForge.EVENT_BUS.post(hearDistanceEvent);
+        return hearDistanceEvent.getDistance();
+    }
+
 }

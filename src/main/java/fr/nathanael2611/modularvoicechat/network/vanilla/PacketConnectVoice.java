@@ -79,8 +79,10 @@ public class PacketConnectVoice implements IMessage
         @Override
         public IMessage onMessage(PacketConnectVoice message, MessageContext ctx)
         {
+            Helpers.log("Receiving voice-connect packet from server");
             if (Minecraft.getMinecraft().getCurrentServerData() != null && !Minecraft.getMinecraft().getCurrentServerData().isOnLAN())
             {
+                Helpers.log("Connected to a Minecraft Server, trying to handle voice connection.");
                 new Thread(()->{
                     try
                     {
@@ -101,6 +103,7 @@ public class PacketConnectVoice implements IMessage
                     {
                         SpeakerManager.stop();
                     }
+                    Helpers.log("[PRE] Handle VoiceClient start.");
                     VoiceClientManager.start(message.playerName, Minecraft.getMinecraft().getCurrentServerData().serverIP.split(":")[0], message.port);
                     MicroManager.start();
                     SpeakerManager.start();

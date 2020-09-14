@@ -42,6 +42,7 @@ public class VoiceClient
             {
                 try
                 {
+                    Helpers.log(String.format("Try to connect to the UDP server! [%s:%s]", this.host, this.port));
                     client.connect(5000, host, port + 1, port);
                     if (VoiceClientManager.isStarted())
                     {
@@ -51,8 +52,8 @@ public class VoiceClient
                     }
                 } catch (IOException e)
                 {
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§4[" + ModularVoiceChat.MOD_NAME + "] §cCannot connect to voice-server, try reconnecting! (or see logs for complete error)"));
                     e.printStackTrace();
+                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§4[" + ModularVoiceChat.MOD_NAME + "] §cCannot connect to voice-server, try reconnecting! (or see logs for complete error)"));
                 }
             }
         });
@@ -77,6 +78,7 @@ public class VoiceClient
     private void authenticate(String name)
     {
         send(new HelloImAPlayer(name));
+        System.out.println("Successfuly send");
     }
 
     /**

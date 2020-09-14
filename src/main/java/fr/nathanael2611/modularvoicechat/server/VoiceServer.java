@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Lists;
 import fr.nathanael2611.modularvoicechat.ModularVoiceChat;
+import fr.nathanael2611.modularvoicechat.api.VoiceServerStartEvent;
 import fr.nathanael2611.modularvoicechat.api.dispatcher.IVoiceDispatcher;
 import fr.nathanael2611.modularvoicechat.config.ServerConfig;
 import fr.nathanael2611.modularvoicechat.network.objects.HelloImAPlayer;
@@ -15,6 +16,7 @@ import fr.nathanael2611.modularvoicechat.network.objects.VoiceToServer;
 import fr.nathanael2611.modularvoicechat.util.Helpers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,6 +35,14 @@ public class VoiceServer
     {
         this.port = ServerConfig.generalConfig.port;
         this.dispatcher = ServerConfig.generalConfig.dispatcher.createDispatcher();
+        {
+            VoiceServerStartEvent event = new VoiceServerStartEvent(this, this.dispatcher);
+            MinecraftForge.EVENT_BUS.post(event);
+            if(event.getVoiceDispatcher() != this.dispatcher)
+            {
+                this.dispatcher = event.getVoiceDispatcher();
+            }
+        }
         this.server = new Server(10000000, 10000000);
         KryoObjects.registerObjects(this.server.getKryo());
         server.start();
