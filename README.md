@@ -11,6 +11,7 @@ Ladite API s'utilise via divers events vous permettant de manipuler et de transm
 Les events serveurs
  - **HearDistanceEvent**: Il est déclenché lorsque le mod va tenter de connaître la distance maximale à laquelle un joueur peut entendre. Vous permettant ainsi de la modifier.
  - **VoiceDispatchEvent**: Il est déclenché avant l'envoi des packets audios du joueur qui parle, aux différents joueurs, et vous donne accès à une multitude de fonctions pour dispatcher l'audio selon vos souhaits.
+ - **VoiceServerStartEvent**: Il est délenché lorsque le serveur vocal se lance. Il vous permet de définir un IVoiceDispatcher custom afin de créer votre propre système de voix.
 
 Les events client:
  - **StartVoiceRecordEvent**: Il est déclenché juste avant que la voix commence à être enregistrée, puis envoyée au serveur.
