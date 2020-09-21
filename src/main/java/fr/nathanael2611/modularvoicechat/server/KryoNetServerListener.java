@@ -4,10 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import fr.nathanael2611.modularvoicechat.api.VoiceDispatchEvent;
 import fr.nathanael2611.modularvoicechat.api.VoiceProperties;
-import fr.nathanael2611.modularvoicechat.network.objects.HelloImAPlayer;
-import fr.nathanael2611.modularvoicechat.network.objects.VoiceEndToClient;
-import fr.nathanael2611.modularvoicechat.network.objects.VoiceEndToServer;
-import fr.nathanael2611.modularvoicechat.network.objects.VoiceToServer;
+import fr.nathanael2611.modularvoicechat.network.objects.*;
 import fr.nathanael2611.modularvoicechat.util.Helpers;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
@@ -35,6 +32,7 @@ public class KryoNetServerListener extends Listener
             {
                 voiceServer.CONNECTIONS_MAP.put(playerMP.getEntityId(), connection);
                 Helpers.log("Successfully added " + hello.playerName + " to voice-server connected-players!");
+                connection.sendTCP(new HelloYouAreAPlayer());
             }
             else
             {

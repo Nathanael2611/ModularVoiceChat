@@ -15,7 +15,7 @@ public class ServerEventHandler
     {
         if (VoiceServerManager.isStarted())
         {
-            Helpers.log("Requesting " + event.player.getName() + " to connect to voice-server.");
+            Helpers.log("Requesting " + event.player.getName() + " to connect to voice-server... Sending packet.");
             VanillaPacketHandler.getInstance().getNetwork().sendTo(new PacketConnectVoice(VoiceServerManager.getServer().getPort(), event.player.getName(), ServerConfig.generalConfig.showWhoSpeak), Helpers.getPlayerMP(event.player));
         }
     }

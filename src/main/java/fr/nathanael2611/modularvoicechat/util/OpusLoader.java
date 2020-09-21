@@ -48,8 +48,8 @@ public class OpusLoader
                 System.loadLibrary("libopus_jni");
             } else if (property.contains("windows"))
             {
-                Files.copy(Objects.requireNonNull(ResourceAccessor.getResourceAsStream("native/64/windows/libopus-0.dll")), (new File(tmp, "libopus-0.dll")).toPath(), new CopyOption[0]);
-                Files.copy(Objects.requireNonNull(ResourceAccessor.getResourceAsStream("native/64/windows/libopus-0_jni.dll")), (new File(tmp, "libopus-0_jni.dll")).toPath(), new CopyOption[0]);
+                Files.copy(Objects.requireNonNull(ResourceAccessor.getResourceAsStream("native/64/windows/libopus-0.dll"), "La lib opus n'a pas été trouvée dans le jar"), (new File(tmp, "libopus-0.dll")).toPath(), new CopyOption[0]);
+                Files.copy(Objects.requireNonNull(ResourceAccessor.getResourceAsStream("native/64/windows/libopus-0_jni.dll"), "La lib opus n'a pas été trouvée dans le jar"), (new File(tmp, "libopus-0_jni.dll")).toPath(), new CopyOption[0]);
                 System.loadLibrary("libopus-0");
                 System.loadLibrary("libopus-0_jni");
             }

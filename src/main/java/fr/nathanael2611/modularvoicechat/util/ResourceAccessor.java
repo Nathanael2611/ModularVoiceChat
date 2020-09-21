@@ -1,6 +1,5 @@
 package fr.nathanael2611.modularvoicechat.util;
 
-import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.net.URL;
 

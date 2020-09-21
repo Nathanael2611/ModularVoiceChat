@@ -6,60 +6,84 @@ import fr.nathanael2611.modularvoicechat.network.objects.HelloImAPlayer;
 import fr.nathanael2611.modularvoicechat.network.objects.KryoObjects;
 import fr.nathanael2611.modularvoicechat.util.Helpers;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.util.text.TextComponentString;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The VoiceClient
  */
 public class VoiceClient
 {
-
-    /* The server hostname */
-    private String host;
     /* The server port */
     private int port;
+    /* The server host */
+    private String host;
     /* The Client */
     private Client client;
+    /* Is handshake done */
+    private boolean handshakeDone = false;
+
+    private final ScheduledExecutorService RECONNECT_SERVICE = Executors.newSingleThreadScheduledExecutor();
 
     /**
      * Constructor
      * @param playerName the player name
-     * @param host the server hostname
      * @param port the server port
      */
     VoiceClient(String playerName, String host, int port)
     {
-        this.host = host;
         this.port = port;
-
-        Thread t = new Thread(() -> {
-            this.client = new Client(10000000, 10000000);
-            KryoObjects.registerObjects(client.getKryo());
-            client.start();
-            client.addListener(new KryoNetClientListener(this));
+        this.host = host;
+        this.client = new Client(10000000, 10000000);
+        client.start();
+        KryoObjects.registerObjects(client.getKryo());
+        client.addListener(new KryoNetClientListener(this));
+        RECONNECT_SERVICE.scheduleAtFixedRate(() -> {
+            if(!this.client.isConnected() && host != null)
             {
                 try
                 {
-                    Helpers.log(String.format("Try to connect to the UDP server! [%s:%s]", this.host, this.port));
+                    Helpers.log(String.format("Try to connect to the UDP server! [%s:%s]", host, this.port));
                     client.connect(5000, host, port + 1, port);
-                    if (VoiceClientManager.isStarted())
-                    {
-                        Helpers.log("Try authenticate with username " + playerName);
-                        VoiceClientManager.getClient().authenticate(playerName);
-                        Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§2[" + ModularVoiceChat.MOD_NAME + "] §aSuccessfully established connection with voice-server!"));
-                    }
                 } catch (IOException e)
                 {
                     e.printStackTrace();
                     Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§4[" + ModularVoiceChat.MOD_NAME + "] §cCannot connect to voice-server, try reconnecting! (or see logs for complete error)"));
+                    Helpers.log("Failed to connect to VoiceServer.");
                 }
             }
-        });
-        t.setName("VoiceClient-Kryo");
-        t.start();
+            else if(host == null)
+            {
+                Helpers.log("Host is null!");
+            }
+            else if(!isHandshakeDone())
+            {
+                {
+                    Helpers.log("Try authenticate with username " + playerName);
+                    this.authenticate(playerName);
+                }
+            }
+        }, 1, 5, TimeUnit.SECONDS);
 
+
+    }
+
+    public void setHandshakeDone()
+    {
+        this.handshakeDone = true;
+        Helpers.log("Successfully authenticate with " + Minecraft.getMinecraft().player.getName());
+        Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§2[" + ModularVoiceChat.MOD_NAME + "] §aSuccessfully established connection with voice-server!"));
+    }
+
+    public boolean isHandshakeDone()
+    {
+        return handshakeDone;
     }
 
     /**

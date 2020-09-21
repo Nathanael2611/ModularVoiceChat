@@ -1,6 +1,5 @@
 package fr.nathanael2611.modularvoicechat.network.vanilla;
 
-import fr.nathanael2611.modularvoicechat.ModularVoiceChat;
 import fr.nathanael2611.modularvoicechat.client.ClientEventHandler;
 import fr.nathanael2611.modularvoicechat.client.voice.VoiceClientManager;
 import fr.nathanael2611.modularvoicechat.client.voice.audio.MicroManager;
@@ -8,13 +7,14 @@ import fr.nathanael2611.modularvoicechat.client.voice.audio.SpeakerManager;
 import fr.nathanael2611.modularvoicechat.util.Helpers;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.net.InetSocketAddress;
 
 /**
  * This will be send from the server to the client,
@@ -40,6 +40,7 @@ public class PacketConnectVoice implements IMessage
 
     /**
      * Constructor
+     *
      * @param port VoiceServer port
      */
     public PacketConnectVoice(int port, String playerName, boolean showWhoSpeak)
@@ -51,6 +52,7 @@ public class PacketConnectVoice implements IMessage
 
     /**
      * Reading packet
+     *
      * @param buf buf that contain the packet objects
      */
     @Override
@@ -63,6 +65,7 @@ public class PacketConnectVoice implements IMessage
 
     /**
      * Writing packet to ByteBuf
+     *
      * @param buf buf to write on
      */
     @Override
@@ -79,36 +82,31 @@ public class PacketConnectVoice implements IMessage
         @Override
         public IMessage onMessage(PacketConnectVoice message, MessageContext ctx)
         {
-            Helpers.log("Receiving voice-connect packet from server");
-            if (Minecraft.getMinecraft().getCurrentServerData() != null && !Minecraft.getMinecraft().getCurrentServerData().isOnLAN())
+            if(ctx.getClientHandler().getNetworkManager().getRemoteAddress() instanceof InetSocketAddress)
             {
-                Helpers.log("Connected to a Minecraft Server, trying to handle voice connection.");
-                new Thread(()->{
+                InetSocketAddress address = (InetSocketAddress) ctx.getClientHandler().getNetworkManager().getRemoteAddress();
+                Helpers.log("Receiving voice-connect packet from server: " +
+                        address.getHostString());
+                new Thread(() ->
+                {
                     try
                     {
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     } catch (InterruptedException e)
                     {
                         e.printStackTrace();
                     }
-                    if (VoiceClientManager.isStarted())
-                    {
-                        VoiceClientManager.stop();
-                    }
-                    if (MicroManager.isRunning())
-                    {
-                        MicroManager.stop();
-                    }
-                    if (SpeakerManager.isRunning())
-                    {
-                        SpeakerManager.stop();
-                    }
-                    Helpers.log("[PRE] Handle VoiceClient start.");
-                    VoiceClientManager.start(message.playerName, Minecraft.getMinecraft().getCurrentServerData().serverIP.split(":")[0], message.port);
+                    Helpers.log("Connected to a Minecraft Server, trying to handle voice connection.");
+                    if (VoiceClientManager.isStarted()) VoiceClientManager.stop();
+                    if (MicroManager.isRunning()) MicroManager.stop();
+                    if (SpeakerManager.isRunning()) SpeakerManager.stop();
+                    Helpers.log("[pre] Handle VoiceClient start.");
+                    VoiceClientManager.start(message.playerName, address.getHostString(), message.port);
                     MicroManager.start();
                     SpeakerManager.start();
                     ClientEventHandler.showWhoSpeak = message.showWhoSpeak;
                 }).start();
+
             }
             return null;
         }

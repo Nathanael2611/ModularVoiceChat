@@ -14,6 +14,7 @@ public class KryoObjects
         kryo.register(byte[].class);
         kryo.register(byte.class);
         kryo.register(HelloImAPlayer.class);
+        kryo.register(HelloYouAreAPlayer.class);
         kryo.register(VoiceToClient.class);
         kryo.register(VoiceProperties.class);
         kryo.register(HashMap.class, new MapSerializer());

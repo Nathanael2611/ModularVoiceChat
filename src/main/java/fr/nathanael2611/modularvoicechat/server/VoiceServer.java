@@ -50,11 +50,12 @@ public class VoiceServer
         {
             server.bind(this.port + 1, this.port );
             server.addListener(new KryoNetServerListener(this));
+            Helpers.log("Successfully started VoiceServer.");
         } catch (IOException e)
         {
             e.printStackTrace();
+            Helpers.log("Failed to start VoiceServer.");
         }
-        Helpers.log("Successfully started VoiceServer.");
     }
 
     public void sendToAllExcept(EntityPlayerMP except, Object obj)

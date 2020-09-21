@@ -132,7 +132,7 @@ public class ClientEventHandler
     {
         if (event.phase == TickEvent.Phase.START)
         {
-            if (mc.getCurrentServerData() == null)
+            if (mc.player == null && mc.world == null)
             {
                 if(SpeakerManager.isRunning())
                 {
