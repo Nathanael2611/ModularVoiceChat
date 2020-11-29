@@ -53,14 +53,14 @@ public class GuiConfig extends GuiScreen
         this.buttonList.add(this.speakerVolume = new GuiConfigSlider(this, 12, width/ 2 + 5, y + 25, ClientConfig.SPEAKER_VOLUME, 0, 150));
         this.buttonList.add(this.toggleToTalk = new GuiButton(13, width / 2 - 150 - 5, y + 50, 150, 20, "Mode: " + getSpeakMode()));
         this.buttonList.add(this.audioTest = new GuiButton(14, width / 2 + 5, y + 50, 150, 20, (audioTesting ? "Test audio en cours" : "Tester l'audio")));
-        this.buttonList.add(new GuiButton(1, width / 2 - 155, y + 50 + 25,150 + 5 + 5 + 150, 20, "Rejoindre le discord de " + ModularVoiceChat.MOD_NAME));
+        this.buttonList.add(new GuiButton(1, width / 2 - 155, y + 50 + 25,150 + 5 + 5 + 150, 20, "Join the Discord of " + ModularVoiceChat.MOD_NAME));
         this.buttonList.add(this.microSelector = new GuiDropDownMenu(12, width / 2 - 150 - 4, y, 148, 20, MicroManager.getHandler().getMicro(), Helpers.getStringListAsArray(AudioUtil.findAudioDevices(MicroData.MIC_INFO))));
         this.buttonList.add(this.speakerSelector = new GuiDropDownMenu(13, width / 2 + 6, y, 148, 20, SpeakerManager.getHandler().getSpeaker(), Helpers.getStringListAsArray(AudioUtil.findAudioDevices(SpeakerData.SPEAKER_INFO))));
     }
 
     public String getSpeakMode()
     {
-        return this.config.get(ClientConfig.TOGGLE_TO_TALK).getAsBoolean() ? "Activer-pour-parler" : "Appuyer-pour-parler";
+        return this.config.get(ClientConfig.TOGGLE_TO_TALK).getAsBoolean() ? "Toggle Voice" : "Push-To-Talk";
     }
 
     @Override
@@ -76,8 +76,8 @@ public class GuiConfig extends GuiScreen
         Gui.drawModalRectWithCustomSizedTexture(0, 0, 0, 0, 32, 32, 32, 32);
         fontRenderer.drawStringWithShadow(ModularVoiceChat.MOD_NAME, 32, 10, Color.WHITE.getRGB());
         GlStateManager.popMatrix();
-        mc.fontRenderer.drawStringWithShadow("§nEntrée audio:", width / 2 - 150 - 5, 80, Color.WHITE.getRGB());
-        mc.fontRenderer.drawStringWithShadow("§nSortie audio:", width / 2 + 5, 80, Color.WHITE.getRGB());
+        mc.fontRenderer.drawStringWithShadow("§nRecording Device", width / 2 - 150 - 5, 80, Color.WHITE.getRGB());
+        mc.fontRenderer.drawStringWithShadow("§nPlayback Device:", width / 2 + 5, 80, Color.WHITE.getRGB());
 
 
         super.drawScreen(mouseX, mouseY, partialTicks);
@@ -85,23 +85,23 @@ public class GuiConfig extends GuiScreen
                 mouseY > this.microSelector.y && mouseY < this.microSelector.y + this.microSelector.height &&
                 !this.microSelector.dropDownMenu)
         {
-            this.drawHoveringText("Le périphérique d'entrée audio.\n" + TextFormatting.GRAY + "(Celui qui sera utilisé pour enregistrer votre voix!)", mouseX, mouseY);
+            this.drawHoveringText("Recording device.\n" + TextFormatting.GRAY + "(The one that is going to be used to record your voice!)", mouseX, mouseY);
         }
         else if(mouseX > this.speakerSelector.x && mouseX < this.speakerSelector.x + this.speakerSelector.width &&
                 mouseY > this.speakerSelector.y && mouseY < this.speakerSelector.y + this.speakerSelector.height &&
                 !this.speakerSelector.dropDownMenu)
         {
-            this.drawHoveringText("Le périphérique de sortie audio.\n" + TextFormatting.GRAY + "(Celui dont la voix des autres joueurs sortira!)", mouseX, mouseY);
+            this.drawHoveringText("Playback Device.\n" + TextFormatting.GRAY + "(The one that allows you to hear the voice of other players!)", mouseX, mouseY);
         }
         else if(mouseX > this.microVolume.x && mouseX < this.microVolume.x + this.microVolume.width &&
                 mouseY > this.microVolume.y && mouseY < this.microVolume.y + this.microVolume.height)
         {
-            this.drawHoveringText("Le volume auquel votre voix sera envoyée.", mouseX, mouseY);
+            this.drawHoveringText("The volume of your Recording Device.", mouseX, mouseY);
         }
         else if(mouseX > this.speakerVolume.x && mouseX < this.speakerVolume.x + this.speakerVolume.width &&
                 mouseY > this.speakerVolume.y && mouseY < this.speakerVolume.y + this.speakerVolume.height)
         {
-            this.drawHoveringText("Le volume auquel la voix des autres joueurs sera jouée.", mouseX, mouseY);
+            this.drawHoveringText("The volume of other player's voice.", mouseX, mouseY);
         }
     }
 
@@ -138,7 +138,7 @@ public class GuiConfig extends GuiScreen
             {
                 audioTesting = !audioTesting;
 
-                button.displayString = (audioTesting ? "Test audio en cours" : "Tester l'audio");
+                button.displayString = (audioTesting ? "Testing Microphone." : "Microphone Test");
                 AudioTester.updateTester();
             }
             else if(button.id == 1 )
