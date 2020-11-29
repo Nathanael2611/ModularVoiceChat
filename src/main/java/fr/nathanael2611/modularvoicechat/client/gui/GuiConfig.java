@@ -52,7 +52,7 @@ public class GuiConfig extends GuiScreen
         this.buttonList.add(this.microVolume = new GuiConfigSlider(this, 12, width / 2 - 150 - 5, y + 25, ClientConfig.MICROPHONE_VOLUME, 0, 150));
         this.buttonList.add(this.speakerVolume = new GuiConfigSlider(this, 12, width/ 2 + 5, y + 25, ClientConfig.SPEAKER_VOLUME, 0, 150));
         this.buttonList.add(this.toggleToTalk = new GuiButton(13, width / 2 - 150 - 5, y + 50, 150, 20, "Mode: " + getSpeakMode()));
-        this.buttonList.add(this.audioTest = new GuiButton(14, width / 2 + 5, y + 50, 150, 20, (audioTesting ? "Test audio en cours" : "Tester l'audio")));
+        this.buttonList.add(this.audioTest = new GuiButton(14, width / 2 + 5, y + 50, 150, 20, (audioTesting ? "Testing Microphone" : "Microphone Test")));
         this.buttonList.add(new GuiButton(1, width / 2 - 155, y + 50 + 25,150 + 5 + 5 + 150, 20, "Join the Discord of " + ModularVoiceChat.MOD_NAME));
         this.buttonList.add(this.microSelector = new GuiDropDownMenu(12, width / 2 - 150 - 4, y, 148, 20, MicroManager.getHandler().getMicro(), Helpers.getStringListAsArray(AudioUtil.findAudioDevices(MicroData.MIC_INFO))));
         this.buttonList.add(this.speakerSelector = new GuiDropDownMenu(13, width / 2 + 6, y, 148, 20, SpeakerManager.getHandler().getSpeaker(), Helpers.getStringListAsArray(AudioUtil.findAudioDevices(SpeakerData.SPEAKER_INFO))));
@@ -138,7 +138,7 @@ public class GuiConfig extends GuiScreen
             {
                 audioTesting = !audioTesting;
 
-                button.displayString = (audioTesting ? "Testing Microphone." : "Microphone Test");
+                button.displayString = (audioTesting ? "Testing Microphone" : "Microphone Test");
                 AudioTester.updateTester();
             }
             else if(button.id == 1 )
