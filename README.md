@@ -16,7 +16,7 @@
 **ModularVoiceChat** is a voice chat mod for **Minecraft**, Initially created for an **RP** server, I decided to make this project public, in order to make it an open-source mod open to everyone. This mod includes everything that a voice chat mod on Minecraft should have.
 Namely the possiblity to choose the radius in which the voice will be broadcast, as well as being able to change input device, and output device and you can change the volume of your microphone volume and other players volume. What's more, **ModularVoiceChat** has the unique feature of using the Opus Audio Codec instead of the other voice-related mods that use a different audio codec, This fast and efficient audio codec allows flawless audio quality, within the limits of the microphone used, a lot of the configuration is  available in the server configuration and client configuration.
 
-
+**CurseForge Mod Link**: https://www.curseforge.com/minecraft/mc-mods/modularvoicechat
 
 # ModularVoiceChat API
 ModularVoiceChat has an API that allows you to develop addons for it.
