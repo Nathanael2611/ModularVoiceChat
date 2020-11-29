@@ -14,12 +14,34 @@
 
 
 **ModularVoiceChat** is a voice chat mod for **Minecraft**, Initially created for an **RP** server, I decided to make this project public, in order to make it an open-source mod open to everyone. This mod includes everything that a voice chat mod on Minecraft should have.
-Namely the possiblity to choose the radius in which the voice will be broadcast, as well as being able to change it's input device, and output device and you can change the volume of your microphone volume and other players volume. What's more, ModularVoiceChat has the unique feature of using the Opus Audio Codec instead of the other voice-related mods that use a different audio codec, This fast and efficient audio codec allows flawless audio quality, within the limits of the microphone used, a lot of the configuration is  available in the server configuration and client configuration.
+Namely the possiblity to choose the radius in which the voice will be broadcast, as well as being able to change input device, and output device and you can change the volume of your microphone volume and other players volume. What's more, **ModularVoiceChat** has the unique feature of using the Opus Audio Codec instead of the other voice-related mods that use a different audio codec, This fast and efficient audio codec allows flawless audio quality, within the limits of the microphone used, a lot of the configuration is  available in the server configuration and client configuration.
 
 
 
+# ModularVoiceChat API
+ModularVoiceChat has an API that allows you to develop addons for it.
+This API is used for various events that allow you to manipulate and transmit audio according to different conditions.
+Here's the list of events!
 
-French Translation Below
+Server events
+ - **HearDistanceEvent**: It is triggered when the mod tries to find out the maximum distance a player can hear. This allows you to change it.
+ - **VoiceDispatchEvent**: It is triggered before the player's audio packets are sent to the different players and gives you access to a multitude of functions to dispatch the audio as you wish.
+ - **VoiceServerStartEvent**: It is triggered when the voice server starts. It allows you to define a custom IVoiceDispatcher to create your own voice system.
+
+Client events:
+ - **StartVoiceRecordEvent**: It is triggered just before the voice starts to be recorded and sent to the server.
+ - **StopVoiceRecordEvent**: It is triggered just after the voice is finished being sent. (when the player stops talking)
+ - **VoiceRecordEvent**: It is triggered just before an audio packet is sent to the server. Allowing you to manipulate the audio to your liking.
+ - **VoicePlayEvent**: It is triggered just after an audio packet is received. Allowing you to change the audio to your liking before it is played back!
+
+A more detailed list of events and how to use them is available on the mod's wiki, but it is currently in French only.
+
+# Join the Discord
+ModularVoiceChat has a Discord Server on which you can join to chat!
+--> https://discord.gg/kSu7eFE
+
+
+______________
 # Informations
 ModularVoiceChat est un mod de chat-vocal sur minecraft. Initialement créé pour un serveur RP, j'ai décidé de rendre ce projet public, afin d'en faire un mod open source ouvert à tous.
 Ce mod inclut donc initialement tout ce qu'un mod de chat vocal sur Minecraft devrait avoir. A savoir la possibilité de choisir le rayon dans lequel la voix va être diffusée, la possibilité de changer ses péréphériques d'entrées, ainsi que de sortie audio, ainsi que le volume de ces derniers.
