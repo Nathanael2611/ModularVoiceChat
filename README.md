@@ -1,3 +1,25 @@
+<p align="center">
+  <a href="https://github.com/Nathanael2611/ModularVoiceChat">
+    <img src="micro.png" alt="micro" width="80" height="80">
+  </a>
+
+  <h3 align="center">ModularVoiceChat</h3>
+
+  <p align="center">
+    Open-sourced proximity voice chat for Minecraft 1.12.2.
+    <br />
+    <a href="https://github.com/Nathanael2611/ModularVoiceChat/issues">Report Bug</a>
+  </p>
+</p>
+
+
+**ModularVoiceChat** is a voice chat mod for **Minecraft**, Initially created for an **RP** server, I decided to make this project public, in order to make it an open-source mod open to everyone. This mod includes everything that a voice chat mod on Minecraft should have.
+Namely the possiblity to choose the radius in which the voice will be broadcast, as well as being able to change it's input device, and output device and you can change the volume of your microphone volume and other players volume. What's more, ModularVoiceChat has the unique feature of using the Opus Audio Codec instead of the other voice-related mods that use a different audio codec, This fast and efficient audio codec allows flawless audio quality, within the limits of the microphone used, a lot of the configuration is  available in the server configuration and client configuration.
+
+
+
+
+French Translation Below
 # Informations
 ModularVoiceChat est un mod de chat-vocal sur minecraft. Initialement créé pour un serveur RP, j'ai décidé de rendre ce projet public, afin d'en faire un mod open source ouvert à tous.
 Ce mod inclut donc initialement tout ce qu'un mod de chat vocal sur Minecraft devrait avoir. A savoir la possibilité de choisir le rayon dans lequel la voix va être diffusée, la possibilité de changer ses péréphériques d'entrées, ainsi que de sortie audio, ainsi que le volume de ces derniers.
