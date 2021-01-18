@@ -13,9 +13,7 @@ import java.util.List;
 public class AudioUtil
 {
 
-
     public static final AudioFormat FORMAT = new AudioFormat(48000, 16, 2, true, false);
-
 
     public static Mixer findMixer(String name, Line.Info lineInfo)
     {

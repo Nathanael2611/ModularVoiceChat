@@ -30,6 +30,12 @@ public class OpusEncoder implements IAudioEncoder
     }
 
     @Override
+    public int encoderId()
+    {
+        return 0;
+    }
+
+    @Override
     public void close()
     {
         this.codec.destroy();

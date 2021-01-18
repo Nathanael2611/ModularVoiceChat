@@ -23,6 +23,9 @@ public class ServerConfig
 
         @Config.Comment("The used voice-dispatcher")
         public Dispatcher dispatcher = new Dispatcher();
+
+        @Config.Comment({"This field is optionnal, but may correct some issue with connecting to voice-server!", "By providing an given hostname you are assured that all players use the same."})
+        public String forcedHostname = "";
     }
 
     public static class Dispatcher

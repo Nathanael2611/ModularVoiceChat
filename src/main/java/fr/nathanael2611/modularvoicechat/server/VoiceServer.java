@@ -48,7 +48,7 @@ public class VoiceServer
         server.start();
         try
         {
-            server.bind(this.port + 1, this.port );
+            server.bind(this.port, this.port );
             server.addListener(new KryoNetServerListener(this));
             Helpers.log("Successfully started VoiceServer.");
         } catch (IOException e)

@@ -13,6 +13,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -95,9 +96,10 @@ public class ClientEventHandler
                 }
             } else
             {
-                mc.fontRenderer.drawStringWithShadow(String.format("§c[%s] Not connected to vocal-server. Please try reconnecting.", ModularVoiceChat.MOD_NAME), 2, 2, Color.WHITE.getRGB());
+                mc.fontRenderer.drawStringWithShadow(String.format("§c[%s] %s", ModularVoiceChat.MOD_NAME, I18n.format("mvc.error.notconnected")), 2, 2, Color.WHITE.getRGB());
             }
         }
+        GlStateManager.color(1, 1, 1, 1F);
     }
 
     @SubscribeEvent

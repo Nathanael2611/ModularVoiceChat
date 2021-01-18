@@ -7,6 +7,7 @@ import fr.nathanael2611.modularvoicechat.network.objects.KryoObjects;
 import fr.nathanael2611.modularvoicechat.util.Helpers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextComponentString;
 
 import java.io.IOException;
@@ -50,11 +51,12 @@ public class VoiceClient
                 try
                 {
                     Helpers.log(String.format("Try to connect to the UDP server! [%s:%s]", host, this.port));
-                    client.connect(5000, host, port + 1, port);
+                    client.connect(5000, host, port, port);
+                    this.authenticate(playerName);
                 } catch (IOException e)
                 {
                     e.printStackTrace();
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§4[" + ModularVoiceChat.MOD_NAME + "] §cCannot connect to voice-server, try reconnecting! (or see logs for complete error)"));
+                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§4[" + ModularVoiceChat.MOD_NAME + "] §c" + I18n.format("mvc.error.cantconnect")));
                     Helpers.log("Failed to connect to VoiceServer.");
                 }
             }
@@ -65,11 +67,10 @@ public class VoiceClient
             else if(!isHandshakeDone())
             {
                 {
-                    Helpers.log("Try authenticate with username " + playerName);
                     this.authenticate(playerName);
                 }
             }
-        }, 1, 5, TimeUnit.SECONDS);
+        }, 5, 15, TimeUnit.SECONDS);
 
 
     }
@@ -78,7 +79,7 @@ public class VoiceClient
     {
         this.handshakeDone = true;
         Helpers.log("Successfully authenticate with " + Minecraft.getMinecraft().player.getName());
-        Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§2[" + ModularVoiceChat.MOD_NAME + "] §aSuccessfully established connection with voice-server!"));
+        Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§2[" + ModularVoiceChat.MOD_NAME + "] §a" + I18n.format("mvc.messages.connected")));
     }
 
     public boolean isHandshakeDone()
@@ -101,8 +102,8 @@ public class VoiceClient
      */
     private void authenticate(String name)
     {
+        Helpers.log("Try authenticate with username " + name);
         send(new HelloImAPlayer(name));
-        System.out.println("Successfuly send");
     }
 
     /**
@@ -111,6 +112,7 @@ public class VoiceClient
     public void close()
     {
         this.client.close();
+        this.RECONNECT_SERVICE.shutdown();
     }
 
     /**

@@ -1,0 +1,17 @@
+mvc.config.pushtotalk=Appuyer-pour-parler
+mvc.config.toggletotalk=Activer-pour-parler
+mvc.config.audio.test.on=Test audio en cours..
+mvc.config.audio.test.off=Tester l'audio
+mvc.config.joindiscord=Rejoindre le discord de ModularVoiceChat
+mvc.config.audio.input=Entrée audio:
+mvc.config.audio.output=Sortie audio:
+mvc.config.openconfig=Ouvrir la configuration
+
+mvc.config.audio.input.volume=Le volume auquel votre voix sera envoyée.
+mvc.config.audio.output.volume=Le volume auquel la voix des autres joueurs sera jouée.
+mvc.config.audio.output.desc=Le périphérique de sortie audio. §7(Celui dont la voix des autres joueurs sortira!)
+mvc.config.audio.input.desc=Le périphérique d'entrée audio. §7(Celui qui sera utilisé pour enregistrer votre voix!)mvc.config.openconfig=Open Config
+
+mvc.error.cantconnect=Erreur de connexion au serveur-vocal, tentative de reconnexion! (voir les logs pour l'erreur complète)
+mvc.messages.connected=Connexion au serveur-vocal établie avec succès!!
+mvc.error.notconnected=Non connecté au serveur-vocal. Essayez de vous reconnecter.

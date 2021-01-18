@@ -5,5 +5,7 @@ public interface IAudioEncoder extends NoExceptionCloseable {
 	byte[] encode(byte[] pcm);
 	
 	byte[] silence();
+
+	int encoderId();
 	
 }

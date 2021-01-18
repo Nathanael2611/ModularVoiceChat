@@ -18,6 +18,10 @@ public class VoiceClientManager
      */
     public static synchronized void start(String playerName, String host, int port)
     {
+        if(isStarted())
+        {
+            stop();
+        }
         INSTANCE = new VoiceClient(playerName, host, port);
     }
 

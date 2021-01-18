@@ -30,6 +30,7 @@ public class KryoNetServerListener extends Listener
             EntityPlayerMP playerMP = Helpers.getPlayerByUsername(hello.playerName);
             if (playerMP != null)
             {
+                voiceServer.CONNECTIONS_MAP.remove(playerMP.getEntityId());
                 voiceServer.CONNECTIONS_MAP.put(playerMP.getEntityId(), connection);
                 Helpers.log("Successfully added " + hello.playerName + " to voice-server connected-players!");
                 connection.sendTCP(new HelloYouAreAPlayer());

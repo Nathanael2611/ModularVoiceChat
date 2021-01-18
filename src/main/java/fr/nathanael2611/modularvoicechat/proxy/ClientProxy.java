@@ -6,6 +6,7 @@ import fr.nathanael2611.modularvoicechat.client.ClientEventHandler;
 import fr.nathanael2611.modularvoicechat.config.ClientConfig;
 import fr.nathanael2611.modularvoicechat.util.OpusLoader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -21,8 +22,8 @@ import java.io.File;
 public class ClientProxy extends CommonProxy
 {
 
-    public static final KeyBinding KEY_SPEAK = new KeyBinding("Push-to-talk", Keyboard.KEY_V, ModularVoiceChat.MOD_NAME);
-    public static final KeyBinding KEY_OPEN_CONFIG = new KeyBinding("Open config", Keyboard.KEY_NONE, ModularVoiceChat.MOD_NAME);
+    public static final KeyBinding KEY_SPEAK = new KeyBinding(I18n.format("mvc.config.pushtotalk"), Keyboard.KEY_V, ModularVoiceChat.MOD_NAME);
+    public static final KeyBinding KEY_OPEN_CONFIG = new KeyBinding(I18n.format("mvc.config.openconfig"), Keyboard.KEY_NONE, ModularVoiceChat.MOD_NAME);
 
     private static ClientConfig config;
 
