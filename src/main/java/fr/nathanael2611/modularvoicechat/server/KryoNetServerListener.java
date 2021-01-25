@@ -2,6 +2,7 @@ package fr.nathanael2611.modularvoicechat.server;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import fr.nathanael2611.modularvoicechat.ModularVoiceChat;
 import fr.nathanael2611.modularvoicechat.api.VoiceDispatchEvent;
 import fr.nathanael2611.modularvoicechat.api.VoiceProperties;
 import fr.nathanael2611.modularvoicechat.network.objects.*;
@@ -59,4 +60,12 @@ public class KryoNetServerListener extends Listener
         }
         super.received(connection, object);
     }
+
+    @Override
+    public void disconnected(Connection connection) {
+        if(voiceServer.CONNECTIONS_MAP.inverse().containsKey(connection)){
+            voiceServer.CONNECTIONS_MAP.remove(connection.getID());
+        }
+    }
+
 }
