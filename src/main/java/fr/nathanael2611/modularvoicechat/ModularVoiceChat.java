@@ -3,6 +3,7 @@ package fr.nathanael2611.modularvoicechat;
 import fr.nathanael2611.modularvoicechat.network.vanilla.VanillaPacketHandler;
 import fr.nathanael2611.modularvoicechat.proxy.CommonProxy;
 import fr.nathanael2611.modularvoicechat.server.VoiceServerManager;
+import fr.nathanael2611.modularvoicechat.server.command.VoiceMute;
 import fr.nathanael2611.modularvoicechat.util.OpusLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -60,6 +61,7 @@ public class ModularVoiceChat
     @Mod.EventHandler
     public void onServerStart(FMLServerStartingEvent event)
     {
+        event.registerServerCommand(new VoiceMute());
         if(event.getServer().isDedicatedServer())
         {
             if(!VoiceServerManager.isStarted())

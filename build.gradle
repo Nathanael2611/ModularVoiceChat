@@ -18,7 +18,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 
-version = "BETA-1.5.3"
+version = "1.0"
 group = "fr.nathanael2611.modularvoicechat" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ModularVoiceChat"
 

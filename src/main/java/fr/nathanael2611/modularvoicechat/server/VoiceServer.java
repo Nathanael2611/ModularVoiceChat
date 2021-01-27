@@ -25,7 +25,7 @@ import java.util.Map;
 public class VoiceServer
 {
 
-    final HashBiMap<Integer, Connection> CONNECTIONS_MAP = HashBiMap.create();
+    public final HashBiMap<Integer, Connection> CONNECTIONS_MAP = HashBiMap.create();
 
     private IVoiceDispatcher dispatcher;
     private int port;

@@ -101,6 +101,8 @@ public class GuiConfigSlider extends GuiButton
         }
     }
 
+
+
     /**
      * Fired when the mouse button is released. Equivalent of MouseListener.mouseReleased(MouseEvent e).
      */

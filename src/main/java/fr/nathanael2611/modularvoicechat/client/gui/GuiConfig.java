@@ -79,6 +79,7 @@ public class GuiConfig extends GuiScreen
         GlStateManager.popMatrix();
         mc.fontRenderer.drawStringWithShadow("§n" + I18n.format("mvc.config.audio.input"), width / 2 - 150 - 5, 80, Color.WHITE.getRGB());
         mc.fontRenderer.drawStringWithShadow("§n" + I18n.format("mvc.config.audio.output"), width / 2 + 5, 80, Color.WHITE.getRGB());
+        mc.fontRenderer.drawStringWithShadow("§7" + I18n.format("mvc.config.canMute"), width / 2 - 150 - 5, 200, Color.WHITE.getRGB());
 
 
         super.drawScreen(mouseX, mouseY, partialTicks);

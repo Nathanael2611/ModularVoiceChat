@@ -4,10 +4,13 @@ import fr.nathanael2611.modularvoicechat.ModularVoiceChat;
 import fr.nathanael2611.modularvoicechat.audio.AudioTester;
 import fr.nathanael2611.modularvoicechat.client.ClientEventHandler;
 import fr.nathanael2611.modularvoicechat.config.ClientConfig;
+import fr.nathanael2611.modularvoicechat.server.command.VoiceMute;
+import fr.nathanael2611.modularvoicechat.server.command.VoiceMuteClient;
 import fr.nathanael2611.modularvoicechat.util.OpusLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -36,6 +39,7 @@ public class ClientProxy extends CommonProxy
         ClientRegistry.registerKeyBinding(KEY_OPEN_CONFIG);
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler(Minecraft.getMinecraft()));
         config = new ClientConfig(new File(ModularVoiceChat.modConfigDir, "/ClientConfig.json"));
+        ClientCommandHandler.instance.registerCommand(new VoiceMuteClient());
 
         if(!OpusLoader.loadOpus())
         {

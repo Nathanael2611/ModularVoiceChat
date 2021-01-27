@@ -8,6 +8,8 @@ import fr.nathanael2611.modularvoicechat.proxy.ClientProxy;
 import fr.nathanael2611.modularvoicechat.audio.api.NoExceptionCloseable;
 import fr.nathanael2611.modularvoicechat.audio.speaker.SpeakerData;
 import fr.nathanael2611.modularvoicechat.audio.speaker.SpeakerPlayer;
+import fr.nathanael2611.modularvoicechat.proxy.CommonProxy;
+import fr.nathanael2611.modularvoicechat.util.Helpers;
 
 public class SpeakerHandler implements NoExceptionCloseable
 {
@@ -26,7 +28,11 @@ public class SpeakerHandler implements NoExceptionCloseable
 
     public void receiveVoicePacket(int id, byte[] opusPacket, int volumePercent, VoiceProperties properties)
     {
-        player.accept(id, opusPacket, volumePercent, properties);
+        String name = Helpers.clientGetPlayerNameForId(id);
+        if(name == null || !CommonProxy.getMutedPlayers().isMuted(name))
+        {
+            player.accept(id, opusPacket, volumePercent, properties);
+        }
         SpeakingPlayers.updateTalking(id);
     }
 

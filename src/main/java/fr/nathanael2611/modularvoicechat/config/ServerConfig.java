@@ -32,9 +32,9 @@ public class ServerConfig
     {
         @Config.Comment({"The DispatchType", " - \"distanced\" for a distance-based voice-dispatch", " - \"global\" for a global, to all players, voice-dispatch"})
         public String dispatchType = "distanced";
-        @Config.Comment({"If DispatchType is \"distanced\", it will be the max-distance that a player can hear another one."})
+        @Config.Comment({})
         public int maxDistance = 15;
-        @Config.Comment({"If DispatchType is \"distanced\":", "If true, the sound will fade-out with the distance"})
+        @Config.Comment({, })
         public boolean fadeOut = true;
 
         public IVoiceDispatcher createDispatcher()

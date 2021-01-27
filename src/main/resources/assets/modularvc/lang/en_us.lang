@@ -7,11 +7,17 @@ mvc.config.joindiscord=Join the ModularVoiceChat discord
 mvc.config.audio.input=Audio input:
 mvc.config.audio.output=Audio output:
 
+mvc.moderation.mute.mutedPlayers=§8Muted Players:
+mvc.moderation.mute.playerMuted=§8Muted player §7%s
+mvc.moderation.mute.playerUnmuted=§8Unmuted player §7%s
+
 mvc.config.audio.input.volume=The volume at which your voice will be sent.
 mvc.config.audio.output.volume=The volume at which other players' voices will be played.
 mvc.config.audio.output.desc=The audio output device. §7(The one whose voice of other players will be output!)
 mvc.config.audio.input.desc=The audio input device. §7(The one that will be used to record your voice!)
+mvc.config.canMute=/localvoicemute for mute and unmute players locally.
 
 mvc.error.cantconnect=Cannot connect to voice-server, try reconnecting! (or see logs for complete error)
+mvc.error.muted=§4§lYou cannot speak because you are muted by a server operator!
 mvc.messages.connected=Successfully established connection with voice-server!
 mvc.error.notconnected=Not connected to vocal-server. Please try reconnecting.
