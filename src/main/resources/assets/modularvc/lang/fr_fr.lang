@@ -21,3 +21,6 @@ mvc.error.cantconnect=Erreur de connexion au serveur-vocal, tentative de reconne
 mvc.messages.connected=Connexion au serveur-vocal établie avec succès!!
 mvc.error.notconnected=Non connecté au serveur-vocal. Essayez de vous reconnecter.
 mvc.error.muted=§4§lVous ne pouvez pas parler, parce que vous avez été rendu muet par un opérateur!
+
+mvc.config.stereo.off=Stéreo: OFF
+mvc.config.stereo.on=Stéreo: ON

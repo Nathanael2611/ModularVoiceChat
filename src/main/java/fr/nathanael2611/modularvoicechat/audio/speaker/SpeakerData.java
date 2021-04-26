@@ -1,13 +1,13 @@
 package fr.nathanael2611.modularvoicechat.audio.speaker;
 
 import fr.nathanael2611.modularvoicechat.audio.api.NoExceptionCloseable;
+import fr.nathanael2611.modularvoicechat.proxy.ClientProxy;
 import fr.nathanael2611.modularvoicechat.util.AudioUtil;
 import fr.nathanael2611.modularvoicechat.util.ThreadUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.Mixer;
-import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.*;
 import java.util.Map;
 import java.util.concurrent.*;
 
@@ -142,11 +142,30 @@ public class SpeakerData implements NoExceptionCloseable
             float factor = (float) this.volume / 100;
             float vol = ((float) volumePercent / 100) * factor;
             array = AudioUtil.adjustVolume(array, vol);
+            if(ClientProxy.getConfig().isStereo())
+            {
+                EntityPlayer speaker = (EntityPlayer) Minecraft.getMinecraft().world.getEntityByID(id);
+                if (speaker != null)
+                {
+                    try
+                    {
+                        double atan2 = Math.atan2(speaker.posZ - Minecraft.getMinecraft().player.posZ, speaker.posX - Minecraft.getMinecraft().player.posX);
+                        double angle = Math.toRadians(Minecraft.getMinecraft().player.rotationYawHead) - atan2;
+                        FloatControl control = (FloatControl) lineInfo.getSourceDataLine().getControl(FloatControl.Type.BALANCE);
+                        control.setValue(-1 * (float) (Math.abs(normaliseAngle(angle + Math.PI)) / Math.PI - 0.5f) * 2f);
+                    } catch (Exception ignore)
+                    {
+                    }
+                }
+            }
             lineInfo.setMasterVolume(volumePercent);
             lineInfo.getSourceDataLine().write(array, 0, array.length);
             //lineInfo.getSourceDataLine().drain();
         }
         return array;
+    }
+    double normaliseAngle(double x){
+        return Math.atan2(Math.sin(x),Math.cos(x));
     }
 
     int freeBuffer(int id)

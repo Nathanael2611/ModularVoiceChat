@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import fr.nathanael2611.modularvoicechat.proxy.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;

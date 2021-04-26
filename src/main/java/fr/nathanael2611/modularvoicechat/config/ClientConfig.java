@@ -18,6 +18,7 @@ public class ClientConfig extends GameConfig
     public static final ConfigProperty SPEAKER_VOLUME = new ConfigProperty("speakerVolume", new JsonPrimitive(100));
     public static final ConfigProperty BITRATE = new ConfigProperty("bitrate", new JsonPrimitive(96000));
     public static final ConfigProperty TOGGLE_TO_TALK = new ConfigProperty("toggle-to-talk", new JsonPrimitive(false));
+    public static final ConfigProperty STEREO = new ConfigProperty("stereo", new JsonPrimitive(true));
 
     public ClientConfig(File config)
     {
@@ -51,5 +52,11 @@ public class ClientConfig extends GameConfig
         this.initProperty(SPEAKER_VOLUME);
         this.initProperty(BITRATE);
         this.initProperty(TOGGLE_TO_TALK);
+        this.initProperty(STEREO);
+    }
+
+    public boolean isStereo()
+    {
+        return this.get(STEREO).getAsBoolean();
     }
 }
