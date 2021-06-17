@@ -1,6 +1,7 @@
 package fr.nathanael2611.modularvoicechat.client;
 
 import fr.nathanael2611.modularvoicechat.ModularVoiceChat;
+import fr.nathanael2611.modularvoicechat.api.VoiceKeyEvent;
 import fr.nathanael2611.modularvoicechat.client.gui.GuiConfig;
 import fr.nathanael2611.modularvoicechat.client.voice.VoiceClientManager;
 import fr.nathanael2611.modularvoicechat.client.voice.audio.MicroManager;
@@ -16,9 +17,11 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -154,33 +157,38 @@ public class ClientEventHandler
                 this.mc.displayGuiScreen(new GuiConfig());
             } else if (!GuiConfig.audioTesting)
             {
-                if (ClientProxy.getConfig().get(ClientConfig.TOGGLE_TO_TALK).getAsBoolean())
+                VoiceKeyEvent voiceKeyEvent = new VoiceKeyEvent(ClientProxy.getConfig().get(ClientConfig.TOGGLE_TO_TALK).getAsBoolean());
+                MinecraftForge.EVENT_BUS.post(voiceKeyEvent);
+                if(!voiceKeyEvent.isCanceled())
                 {
-                    if (ClientProxy.KEY_SPEAK.isPressed())
+                    if (voiceKeyEvent.isToggleToTalk())
+                    {
+                        if (ClientProxy.KEY_SPEAK.isPressed())
+                        {
+                            if (MicroManager.isRunning() && !MicroManager.getHandler().isSending())
+                            {
+                                MicroManager.getHandler().start();
+                            } else
+                            {
+                                if (MicroManager.isRunning() && MicroManager.getHandler().isSending())
+                                {
+                                    MicroManager.getHandler().stop();
+                                }
+                            }
+                        }
+
+                    } else if (GameSettings.isKeyDown(ClientProxy.KEY_SPEAK))
                     {
                         if (MicroManager.isRunning() && !MicroManager.getHandler().isSending())
                         {
                             MicroManager.getHandler().start();
-                        } else
-                        {
-                            if (MicroManager.isRunning() && MicroManager.getHandler().isSending())
-                            {
-                                MicroManager.getHandler().stop();
-                            }
                         }
-                    }
-
-                } else if (GameSettings.isKeyDown(ClientProxy.KEY_SPEAK))
-                {
-                    if (MicroManager.isRunning() && !MicroManager.getHandler().isSending())
+                    } else
                     {
-                        MicroManager.getHandler().start();
-                    }
-                } else
-                {
-                    if (MicroManager.isRunning() && MicroManager.getHandler().isSending())
-                    {
-                        MicroManager.getHandler().stop();
+                        if (MicroManager.isRunning() && MicroManager.getHandler().isSending())
+                        {
+                            MicroManager.getHandler().stop();
+                        }
                     }
                 }
             }
