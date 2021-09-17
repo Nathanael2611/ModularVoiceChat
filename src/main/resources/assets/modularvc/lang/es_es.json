@@ -1,0 +1,25 @@
+{
+  "mvc.config.pushtotalk": "Pulsar-para-hablar",
+  "mvc.config.toggletotalk": "Alternar-para-hablar",
+  "mvc.config.openconfig": "Abrir configuración",
+  "mvc.config.audio.test.on": "Prueba de audio en marcha...",
+  "mvc.config.audio.test.off": "Prueba de audio",
+  "mvc.config.joindiscord": "Únete al discord ModularVoiceChat",
+  "mvc.config.audio.input": "Entrada de audio:",
+  "mvc.config.audio.output": "Salida de audio:",
+
+  "mvc.moderation.mute.mutedPlayers": "Jugadores silenciados:",
+  "mvc.moderation.mute.playerMuted": "Silenciar jugador",
+  "mvc.moderation.mute.playerUnmuted": "Desilenciar jugador",
+
+  "mvc.config.audio.input.volume": "El volumen al que se enviará su voz.",
+  "mvc.config.audio.output.volume": "El volumen al que se reproducirán las voces de otros jugadores.",
+  "mvc.config.audio.output.desc": "El dispositivo de salida de audio. (Por donde la voz de los jugadores sonará)",
+  "mvc.config.audio.input.desc": "El dispositivo de entrada de audio. (Por donde se grabará su voz)",
+  "mvc.config.canMute": "/localvoicemute para silenciar y reactivar el sonido localmente.",
+
+  "mvc.error.cantconnect": "No se puede conectar al servidor de voz, ¡intente volver a conectarse! (o consulte los registros para ver el error completo)",
+  "mvc.error.muted": "¡No puedes hablar porque estas silenciado por un administrador del servidor!",
+  "mvc.messages.connected": "Conexión establecida con el servidor de voz con éxito.",
+  "mvc.error.notconnected": "No se ha conectado al servidor de voz. Intente volver a conectarse."
+}
