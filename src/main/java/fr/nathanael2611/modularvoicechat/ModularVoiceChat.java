@@ -4,15 +4,11 @@ import fr.nathanael2611.modularvoicechat.network.vanilla.VanillaPacketHandler;
 import fr.nathanael2611.modularvoicechat.proxy.CommonProxy;
 import fr.nathanael2611.modularvoicechat.server.VoiceServerManager;
 import fr.nathanael2611.modularvoicechat.server.command.VoiceMute;
-import fr.nathanael2611.modularvoicechat.util.OpusLoader;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 
-import javax.swing.*;
 import java.io.File;
-import java.io.IOException;
 
 @Mod(modid = ModularVoiceChat.MOD_ID, name = ModularVoiceChat.MOD_NAME)
 public class ModularVoiceChat

@@ -1,8 +1,6 @@
 package fr.nathanael2611.modularvoicechat.audio;
 
-import fr.nathanael2611.modularvoicechat.api.VoiceProperties;
 import fr.nathanael2611.modularvoicechat.client.gui.GuiConfig;
-import fr.nathanael2611.modularvoicechat.client.voice.audio.MicroHandler;
 import fr.nathanael2611.modularvoicechat.client.voice.audio.MicroManager;
 import fr.nathanael2611.modularvoicechat.client.voice.audio.SpeakerHandler;
 import fr.nathanael2611.modularvoicechat.client.voice.audio.SpeakerManager;

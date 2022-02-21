@@ -139,11 +139,9 @@ public class AudioUtil
         short[] shortArray = new short[buffer.length / 2];
         ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(shortArray);
 
-        for (int i = 0; i < shortArray.length; ++i)
-        {
-            dB = 20.0D * Math.log10(Math.abs((double) shortArray[i] / 32767.0D));
-            if (dB == -1.0D / 0.0 || dB == 0.0D / 0.0)
-            {
+        for (short value : shortArray) {
+            dB = 20.0D * Math.log10(Math.abs((double) value / 32767.0D));
+            if (dB == -1.0D / 0.0 || dB == 0.0D / 0.0) {
                 dB = -90.0D;
             }
         }

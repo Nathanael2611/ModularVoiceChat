@@ -1,6 +1,5 @@
 package fr.nathanael2611.modularvoicechat.proxy;
 
-import fr.nathanael2611.modularvoicechat.config.ServerConfig;
 import fr.nathanael2611.modularvoicechat.server.ServerEventHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
