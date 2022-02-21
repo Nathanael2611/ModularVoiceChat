@@ -245,7 +245,7 @@ public class Helpers
 
     public static void log(String string)
     {
-        System.out.println(String.format(("[%s] [%s] " + string), DATE_FORMAT.format(new Date()), ModularVoiceChat.MOD_NAME));
+        System.out.printf(("[%s] [%s] " + string + "%n"), DATE_FORMAT.format(new Date()), ModularVoiceChat.MOD_NAME);
     }
 
     public static String clientGetPlayerNameForId(int id)

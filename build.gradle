@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url = "https://files.minecraftforge.net/maven" }
+        maven { url = 'https://maven.minecraftforge.net/' }
         maven { url = "https://jitpack.io/" }
 
     }
@@ -51,7 +51,6 @@ configurations {
 }
 
 
-
 dependencies {
 
 }
@@ -65,7 +64,7 @@ processResources {
         include 'mcmod.info'
 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version': project.version, 'mcversion': project.minecraft.version
     }
 
     // copy everything else except the mcmod.info
@@ -90,7 +89,7 @@ shadowJar {
     relocate "org.slf4j", "fr.nathanael2611.repack.org.slf4j"*/
 }
 reobf {
-    shadowJar { }
+    shadowJar {}
 }
 
 artifacts {

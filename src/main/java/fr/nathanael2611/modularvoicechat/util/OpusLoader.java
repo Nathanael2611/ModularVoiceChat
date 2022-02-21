@@ -112,7 +112,7 @@ public class OpusLoader
         } catch (Throwable e)
         {
             e.printStackTrace();
-            System.out.println("Ca a pas marché :c");
+            System.out.println("Ca n'a pas fonctionné :c");
 
         }
         System.out.println("End :eyes:");
