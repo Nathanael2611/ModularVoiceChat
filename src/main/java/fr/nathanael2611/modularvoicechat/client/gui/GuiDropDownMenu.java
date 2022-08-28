@@ -21,6 +21,7 @@ public class GuiDropDownMenu extends GuiButton
         this.array = array;
         this.amountOfItems = array.length;
         this.mouseOn = new boolean[this.amountOfItems];
+        if (this.displayString == null) this.displayString = "";
     }
 
     public GuiDropDownMenu(int id, int x, int y, String par4Str, String[] array)
