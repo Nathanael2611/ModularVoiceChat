@@ -1,0 +1,26 @@
+mvc.config.pushtotalk=Mantener Pulsado
+mvc.config.toggletotalk=Activar/Desactivar
+mvc.config.openconfig=Abrir configuración
+mvc.config.audio.test.on=Probando audio..
+mvc.config.audio.test.off=Probar audio
+mvc.config.joindiscord=Únete al discord de ModularVoiceChat
+mvc.config.audio.input=Entradas:
+mvc.config.audio.output=Salidas:
+
+mvc.moderation.mute.mutedPlayers=§8Jugadores muteados:
+mvc.moderation.mute.playerMuted=§8Jugador muteado §7%s
+mvc.moderation.mute.playerUnmuted=§8Desmutear jugador §7%s
+
+mvc.config.audio.input.volume=El volumen en el que se enviara tu voz.
+mvc.config.audio.output.volume=El volumen en el que sonaran los otros jugadores.
+mvc.config.audio.output.desc=La salida de audio. §7(En donde se escucharan las voces de los otros jugadores!)
+mvc.config.audio.input.desc=La entrada de audio. §7(El dispositivo que grabará tu voz!)
+mvc.config.canMute=/localvoicemute para mutear o desmutear jugadores.
+
+mvc.config.stereo.off=Stereo: OFF
+mvc.config.stereo.on=Stereo: ON
+
+mvc.error.cantconnect=No se pudo conectar al servidor de voz, intenta reconectándote!
+mvc.error.muted=§4§lNo puedes hablar porque has sido mutedo por un admin!
+mvc.messages.connected=Conectado al servidor de voz!
+mvc.error.notconnected=No conectado al servidor de voz, espera un momento o vuelve a intentarlo.

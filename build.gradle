@@ -1,48 +1,62 @@
 buildscript {
     repositories {
+        maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = "https://plugins.gradle.org/m2/"}
         jcenter()
-        maven { url = "https://files.minecraftforge.net/maven" }
-        maven { url = "https://jitpack.io/" }
-
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
-
+        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+        classpath "com.github.jengelman.gradle.plugins:shadow:4.0.4"
     }
 }
-
-apply plugin: 'net.minecraftforge.gradle.forge'
-
-//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+        
+apply plugin: 'net.minecraftforge.gradle'
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
 apply plugin: 'com.github.johnrengelman.shadow'
-
 
 version = "1.1.1"
 group = "fr.nathanael2611.modularvoicechat" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ModularVoiceChat"
 
-sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-    options.encoding = 'UTF-8'
-}
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    version = "1.12.2-14.23.5.2847"
-    runDir = "run"
-
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
+    // The mappings can be changed at any time, and must be in the following format.
+    // snapshot_YYYYMMDD   Snapshot are built nightly.
+    // stable_#            Stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20171003"
+    // Simply re-run your setup task after changing the mappings to update your workspace.
+    //mappings channel: 'snapshot', version: '20171003-1.12'
+    mappings channel: 'snapshot', version: '20171003-1.12'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-}
+    
+    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
-repositories {
-    maven { url = "https://jitpack.io/" }
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+        }
+
+        server {
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+        }
+    }
 }
 
 configurations {
@@ -50,22 +64,24 @@ configurations {
     compile.extendsFrom(internal)
 }
 
-
-
 dependencies {
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
 
+    shadow fileTree(dir: 'libs', include: '*.jar')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
+
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+    inputs.property "mcversion", "1.12"
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version':project.version, 'mcversion':"1.12"
     }
 
     // copy everything else except the mcmod.info
@@ -74,23 +90,61 @@ processResources {
     }
 }
 
-shadowJar {
-//    configurations = [project.configurations.compile]
-
-    /*
-    relocate 'org.apache.commons.collections4', 'fr.nathanael2611.repack.org.apache.commons.collections4'
-    relocate 'gnu.trove', 'fr.nathanael2611.repack.gnu.trove'
-    relocate "com.neovisionaries.ws.client", "fr.nathanael2611.repack.com.neovisionaries.ws.client"
-    relocate "com.iwebpp.crypto", "fr.nathanael2611.repack.com.iwebpp.crypto"
-    relocate "net.dv8tion.jda", "fr.nathanael2611.repack.net.dv8tion.jda"
-    relocate "org.json", "fr.nathanael2611.repack.org.json"
-    relocate "okio", "fr.nathanael2611.repack.okio"
-    relocate "okhttp3", "fr.nathanael2611.repack.okhttp3"
-    relocate "okhttp3", "fr.nathanael2611.repack.okhttp3"
-    relocate "org.slf4j", "fr.nathanael2611.repack.org.slf4j"*/
+// Example for how to get properties into the manifest for reading by the runtime..
+jar {
+    manifest {
+        attributes([
+            "Specification-Title": "examplemod",
+            "Specification-Vendor": "examplemodsareus",
+            "Specification-Version": "1", // We are version 1 of ourselves
+            "Implementation-Title": project.name,
+            "Implementation-Version": "${version}",
+            "Implementation-Vendor" :"examplemodsareus",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
 }
+
+// Example configuration to allow publishing using the maven-publish task
+// This is the preferred method to reobfuscate your jar file
+jar.finalizedBy('reobfJar') 
+// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
+//publish.dependsOn('reobfJar')
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file:///${project.projectDir}/mcmodsrepo"
+        }
+    }
+}
+
+shadowJar {
+    baseName = archivesBaseName
+    classifier = null
+    version = version + "-all"
+    configurations = [project.configurations.shadow]
+    //minimize()
+    //configurations = [project.configurations.compile]
+}
+
 reobf {
-    shadowJar { }
+    shadowJar {} // Reobfuscate the shadowed JAR
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': version, 'mcversion': "1.12.2", 'fversion': "Forge 14.23.5.2860"
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
 }
 
 artifacts {
